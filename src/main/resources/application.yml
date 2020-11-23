@@ -1,0 +1,6 @@
+
+mnp:
+  jwt:
+    secret: supersecret
+    accessTokenExpiration: 3600000 # ms == 1 hour
+    refreshTokenExpiration: 604800000 # ms == 7 days
