@@ -1,4 +1,3 @@
-import { rejects } from "assert"
 import { Action, AsyncAction } from "."
 import * as internalActions from "./internalActions"
 
@@ -21,19 +20,18 @@ export const createAccount: AsyncAction<any, boolean> = async (
     state.currentUser = null
     state.isLoggedIn = false
     if (userInfo.email === "a@gmail.com") {
-      state.error = { message: "user already exists" }
-      rejects(state.error)
-      return
+      state.error = "user already exists"
+      return true
     }
 
     const user = { ...userInfo }
     delete user.password
-    state.currentUser = { ...user, id: "fake-1" }
+    state.currentUser = { ...user, id: "fake-1", isAdmin: true }
     resolve(true)
   })
 }
 
-export const signIn: Action<{ login: string; password: string }, any> = async (
+export const signIn: AsyncAction<{ login: string; password: string }, boolean> = async (
   { state, effects },
   credentials,
 ) => {
@@ -45,17 +43,19 @@ export const signIn: Action<{ login: string; password: string }, any> = async (
     credentials.login,
     credentials.password,
     false,
-  )
+  ).catch(error => {
+    state.error = error.message
+  })
 
   if (!result) {
-    state.error = { message: "Invalid username or password" }
-    return state.error
+    state.error = "Invalid username or password"
+    return false
   }
 
   const currentUser = await effects.api.getCurrentUser()
   state.currentUser = currentUser
   state.isLoggedIn = true
-  return state.currentUser
+  return true
 }
 
 export const signOut: AsyncAction<void, boolean> = async ({
@@ -67,4 +67,8 @@ export const signOut: AsyncAction<void, boolean> = async ({
   state.isLoggedIn = false
   await effects.api.logout()
   return true
+}
+
+export const toggleTheme: Action = ({state}) => {
+  state.isDark = !state.isDark
 }

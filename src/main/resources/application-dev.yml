@@ -13,18 +13,12 @@ spring:
     restart:
       enabled: true
   datasource:
-    url: jdbc:h2:file:./target/h2db/db/mnpstore;DB_CLOSE_DELAY=-1
-    username: MnpStore
+    url: jdbc:mysql://localhost:3306/temp?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: root
     password:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
   liquibase:
-    url: jdbc:h2:file:./target/h2db/db/mnpstore
-    user: MnpStore
-    password:
-    driver-class-name: org.h2.Driver
-  h2:
-    console:
-      enabled: true
+    enabled: false

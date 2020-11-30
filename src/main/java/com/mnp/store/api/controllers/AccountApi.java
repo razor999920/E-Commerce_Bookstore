@@ -5,7 +5,7 @@ import com.mnp.store.contracts.authorization.dtos.LoginRequestDto;
 import com.mnp.store.contracts.authorization.dtos.LoginResponseDto;
 import com.mnp.store.contracts.authorization.dtos.RefreshTokenDto;
 import com.mnp.store.contracts.users.UserService;
-import com.mnp.store.contracts.users.dtos.RegisterUserRequestDto;
+import com.mnp.store.contracts.users.dtos.CreateUserRequestDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,12 +43,13 @@ public class AccountApi {
 
     @GetMapping("auth/jwt")
     public ResponseEntity<String> jwt() {
+        // TODO
         return ResponseEntity.ok("");
     }
 
     @PostMapping("account/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void register(@Valid @RequestBody RegisterUserRequestDto request) {
-        userService.register(request);
+    public void register(@Valid @RequestBody CreateUserRequestDto request) {
+        userService.createUser(request);
     }
 }

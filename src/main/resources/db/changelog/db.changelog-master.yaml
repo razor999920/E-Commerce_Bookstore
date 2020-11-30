@@ -1,1 +1,152 @@
-databaseChangeLog: []
+databaseChangeLog:
+- changeSet:
+    id: 1606190172785-1
+    author: imminh (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: CONSTRAINT_2
+            name: ID
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: NAME
+            type: VARCHAR(255)
+        tableName: ROLE
+- changeSet:
+    id: 1606190172785-2
+    author: imminh (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: CONSTRAINT_27
+            name: ID
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: ACTIVATED
+            type: BOOLEAN
+        - column:
+            constraints:
+              nullable: false
+            name: EMAIL
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: PASSWORD
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: USERNAME
+            type: VARCHAR(255)
+        tableName: USER
+- changeSet:
+    id: 1606190172785-3
+    author: imminh (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: CONSTRAINT_B
+            name: USER_ID
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+              primaryKey: true
+              primaryKeyName: CONSTRAINT_B
+            name: ROLE_ID
+            type: BIGINT
+        tableName: USER_ROLE
+- changeSet:
+    id: 1606190172785-4
+    author: imminh (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: NAME
+        constraintName: UK_8SEWWNPAMNGI6B1DWAA88ASKK
+        tableName: ROLE
+- changeSet:
+    id: 1606190172785-5
+    author: imminh (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: EMAIL
+        constraintName: UK_OB8KQYQQGMEFL0ACO34AKDTPE
+        tableName: USER
+- changeSet:
+    id: 1606190172785-6
+    author: imminh (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: USERNAME
+        constraintName: UK_SB8BBOUER5WAK8VYIIY4PF2BX
+        tableName: USER
+- changeSet:
+    id: 1606190172785-7
+    author: imminh (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: USER_ID
+        indexName: FK859N2JVI8IVHUI0RL0ESWS6O_INDEX_B
+        tableName: USER_ROLE
+- changeSet:
+    id: 1606190172785-8
+    author: imminh (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: ROLE_ID
+        indexName: FKA68196081FVOVJHKEK5M97N3Y_INDEX_B
+        tableName: USER_ROLE
+- changeSet:
+    id: 1606190172785-9
+    author: imminh (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: USER_ID
+        baseTableName: USER_ROLE
+        constraintName: FK859N2JVI8IVHUI0RL0ESWS6O
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: ID
+        referencedTableName: USER
+        validate: true
+- changeSet:
+    id: 1606190172785-10
+    author: imminh (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: ROLE_ID
+        baseTableName: USER_ROLE
+        constraintName: FKA68196081FVOVJHKEK5M97N3Y
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: ID
+        referencedTableName: ROLE
+        validate: true
+

@@ -9,7 +9,9 @@ module.exports = {
   mode: "development",
   devtool: "source-map",
   entry: {
-    app: path.join(__dirname, "src", "index.tsx"),
+    main: [
+      path.join(__dirname, "src", "index.tsx"),
+    ],
   },
   output: {
     filename: "[name].js",
@@ -17,6 +19,10 @@ module.exports = {
     publicPath: "/",
   },
   resolve: {
+    alias: {
+      "@mnp": path.join(__dirname, "/src"),
+      "@components": path.join(__dirname, "/src/components"),
+    },
     modules: ["node_modules", path.resolve(__dirname, "./")],
     extensions: [".ts", ".tsx", ".js", ".json"],
   },
@@ -63,18 +69,20 @@ module.exports = {
     ],
   },
   devServer: {
+    publicPath: "/",
     port: 3000,
-    hot: true,
-    noInfo: false,
-    quiet: false,
-    contentBase: path.join(__dirname, "dist"),
     historyApiFallback: true,
+    headers: { "Access-Control-Allow-Origin": "*" },
     proxy: {
       "/api": {
         target: "http://localhost:8080",
         secure: false,
       },
     },
+    hot: true,
+    noInfo: false,
+    quiet: false,
+    contentBase: path.join(__dirname, "dist"),
   },
   plugins: [
     new CleanWebpackPlugin(),

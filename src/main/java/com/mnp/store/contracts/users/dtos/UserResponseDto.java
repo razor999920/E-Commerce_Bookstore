@@ -1,7 +1,5 @@
 package com.mnp.store.contracts.users.dtos;
 
-import com.mnp.store.domain.users.User;
-
 public class UserResponseDto {
     private String username;
     private String email;
@@ -12,10 +10,6 @@ public class UserResponseDto {
     public UserResponseDto(String username, String email) {
         this.username = username;
         this.email = email;
-    }
-
-    public UserResponseDto(User user) {
-        this(user.getUsername(), user.getEmail());
     }
 
     public String getUsername() {
@@ -34,3 +28,4 @@ public class UserResponseDto {
         this.email = email;
     }
 }
+

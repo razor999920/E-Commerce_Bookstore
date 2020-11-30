@@ -1,10 +1,9 @@
 package com.mnp.store.contracts.users.dtos;
 
-public class RegisterUserRequestDto {
-    private String username;
-    private String email;
-    private String password;
-    private String passwordConfirm;
+public class CreateUserRequestDto {
+    public String username;
+    public String email;
+    public String password;
 
     public String getUsername() {
         return username;
@@ -29,12 +28,6 @@ public class RegisterUserRequestDto {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
 }
+
+

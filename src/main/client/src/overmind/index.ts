@@ -1,6 +1,6 @@
 import { IAction, IConfig, IOnInitialize, IOperator } from "overmind"
 
-import { createHook } from "overmind-react"
+import { createActionsHook, createEffectsHook, createHook, createReactionHook, createStateHook } from "overmind-react"
 
 import * as effects from "./effects"
 import * as actions from "./actions"
@@ -31,3 +31,7 @@ export interface Operator<Input = void, Output = Input>
   extends IOperator<Config, Input, Output> {}
 
 export const useOvermind = createHook<Config>()
+export const useState = createStateHook<Config>()
+export const useAction = createActionsHook<Config>()
+export const useEffects = createEffectsHook<Config>()
+export const useReaction = createReactionHook<Config>()
