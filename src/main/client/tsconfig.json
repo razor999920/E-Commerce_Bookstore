@@ -1,0 +1,28 @@
+{
+    "exclude": ["node_modules", "public", "dist"],
+    "include": ["src/**/*"],
+    "compilerOptions": {
+        "outDir": "./dist",
+        "target": "es6",
+        "module": "commonjs",
+        "jsx": "react",
+        "lib": [
+            "ESNext.AsyncIterable",
+            "ES6",
+            "DOM",
+            "ES2017.Object",
+            "ES2017.SharedMemory"
+        ],
+        "baseUrl": "./",
+        "resolveJsonModule": true,
+        "allowJs": true,
+        "checkJs": false,
+        "composite": true,
+        "declaration": true,
+        "declarationMap": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "incremental": true,
+        "skipLibCheck": true
+    }
+}
