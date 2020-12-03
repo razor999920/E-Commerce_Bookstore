@@ -16,8 +16,14 @@ public interface UserService {
 
     Optional<UserResponseDto> getUserByUsername(String username);
 
+    Optional<UserResponseDto> getUserByEmail(String email);
+
+    Optional<UserResponseDto> getUserByLogin(String login);
+
     UserResponseDto createUser(CreateUserRequestDto userInfo);
 
     void deleteUser(String username);
+
+    Optional<String> getCurrentUser();
 }
 

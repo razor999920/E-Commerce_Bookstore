@@ -1,0 +1,18 @@
+{
+  "categories": [
+    "Comic Book",
+    "Fantasy",
+    "Novel",
+    "Horror",
+    "Romantic",
+    "Sci-fi",
+    "Thriller",
+    "Children Book"
+  ],
+  "books": [
+    {
+      "title": "The Princeton Children Book",
+      "inventory": "8"
+    }
+  ]
+}

@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${mnp.jwt.secret")
+    @Value("${mnp.jwt.secret}")
     private String jwtSecret;
 
     @Value(("${mnp.jwt.accessTokenExpiration}"))

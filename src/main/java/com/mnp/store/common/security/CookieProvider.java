@@ -4,6 +4,7 @@ import com.mnp.store.common.security.jwt.JwtTokenProvider;
 import com.mnp.store.common.security.jwt.JwtTokenType;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,6 +25,14 @@ public class CookieProvider {
 
     public HttpCookie deleteAccessTokenCookie() {
         return ResponseCookie.from(JwtTokenType.ACCESS_TOKEN.name(), "")
+                .maxAge(0)
+                .httpOnly(true)
+                .path("/")
+                .build();
+    }
+
+    public HttpCookie deleteRefreshTokenCookie() {
+        return ResponseCookie.from(JwtTokenType.REFRESH_TOKEN.name(), "")
                 .maxAge(0)
                 .httpOnly(true)
                 .path("/")

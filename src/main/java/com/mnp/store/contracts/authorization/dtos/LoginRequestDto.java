@@ -1,15 +1,15 @@
 package com.mnp.store.contracts.authorization.dtos;
 
 public class LoginRequestDto {
-    private String usernameOrEmail;
+    private String login;
     private String password;
 
-    public String getUsernameOrEmail() {
-        return usernameOrEmail;
+    public String getLogin() {
+        return login;
     }
 
-    public void setUsernameOrEmail(String usernameOrEmail) {
-        this.usernameOrEmail = usernameOrEmail;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getPassword() {

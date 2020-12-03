@@ -1,0 +1,10 @@
+insert into category (id, name) values (1, 'Children Literature');
+insert into category (id, name) values (2, 'Comic Book');
+insert into category (id, name) values (3, 'Fantasy');
+insert into category (id, name) values (4, 'Horror');
+insert into category (id, name) values (5, 'Novel');
+insert into category (id, name) values (6, 'Romantic');
+insert into category (id, name) values (7, 'Sci-Fi');
+insert into category (id, name) values (8, 'Thriller');
+insert into category (id, name) values (9, 'Documentary');
+insert into category (id, name) values (10, 'Biography');

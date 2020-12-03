@@ -4,7 +4,7 @@ logging:
     com.mnp.store: debug
 
 server:
-  port: 8080
+  port: 4000
 
 spring:
   profiles:
@@ -19,6 +19,9 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
   liquibase:
     enabled: false
+  thymeleaf:
+    prefix: file:src/main/resources/templates/
+    cache: false
