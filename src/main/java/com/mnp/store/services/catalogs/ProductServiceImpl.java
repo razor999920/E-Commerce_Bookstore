@@ -28,6 +28,8 @@ public class ProductServiceImpl implements ProductService {
         newProduct.setPrice(price);
         newProduct.setAuthor(author);
         newProduct.setCategory(category);
+
+        productRepository.save(newProduct);
     }
 
     public List<Product> listAllProducts () {
@@ -35,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Optional<Product> getProductByISBN (String isbn) {
-        return productRepository.findOneByISBNIgnoreCase(isbn);
+        return productRepository.findOneByIsbnIgnoreCase(isbn);
     }
 
     public Optional<Product> getProductByGategory (String category) {
