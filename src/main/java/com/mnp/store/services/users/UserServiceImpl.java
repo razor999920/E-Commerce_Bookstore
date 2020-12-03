@@ -1,14 +1,19 @@
 package com.mnp.store.services.users;
 
-import com.mnp.store.common.security.exceptions.PasswordMismatchException;
-import com.mnp.store.common.security.exceptions.UserExistsException;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
 import com.mnp.store.contracts.users.UserService;
-import com.mnp.store.contracts.users.dtos.RegisterUserRequestDto;
+import com.mnp.store.contracts.users.dtos.CreateUserRequestDto;
 import com.mnp.store.contracts.users.dtos.UserResponseDto;
+import com.mnp.store.contracts.users.dtos.IdentityAlreadyExistsException;
 import com.mnp.store.domain.authorization.Role;
 import com.mnp.store.domain.authorization.RoleConstants;
 import com.mnp.store.domain.users.User;
 import com.mnp.store.domain.users.UserRepository;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -19,71 +24,89 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final ModelMapper mapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public UserServiceImpl(ModelMapper modelMapper, PasswordEncoder passwordEncoder, UserRepository userRepository) {
+        this.mapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
     }
 
-    public UserResponseDto register(RegisterUserRequestDto request) {
+    @Transactional(readOnly = true)
+    public Page<UserResponseDto> listAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable).map(u -> mapper.map(u, UserResponseDto.class));
+    }
 
-        if (!request.getPassword().equals(request.getPasswordConfirm()))
-            throw new PasswordMismatchException();
+    @Transactional(readOnly = true)
+    public Optional<UserResponseDto> getUserById(long id) {
+        return userRepository.findById(id).map(u -> mapper.map(u, UserResponseDto.class));
+    }
 
-        userRepository.findOneByUsernameOrEmailIgnoreCase(request.getUsername(), request.getEmail())
-                .ifPresent(u -> {
-                    throw new UserExistsException(request.getUsername());
-                });
+    public UserResponseDto createUser(CreateUserRequestDto userInfo) {
+
+        userRepository.findOneByUsernameIgnoreCase(userInfo.getUsername()).ifPresent(u -> {
+            throw new IdentityAlreadyExistsException("username", userInfo.getUsername());
+        });
+
+        userRepository.findOneByEmailIgnoreCase(userInfo.getEmail()).ifPresent(u -> {
+            throw new IdentityAlreadyExistsException("email", userInfo.getEmail());
+        });
 
         User newUser = new User();
-        String encryptedPassword = passwordEncoder.encode(request.getPassword());
+        mapper.map(userInfo, newUser);
 
-        newUser.setUsername(request.getUsername().toLowerCase());
-        newUser.setEmail(request.getEmail().toLowerCase());
-        newUser.setPassword(encryptedPassword);
-
-        // TODO: default activated should be false
+        // TODO: remove this
+        Set<Role> roles = new HashSet<>();
+        roles.add(RoleConstants.user());
+        roles.add(RoleConstants.admin());
+        newUser.setRoles(roles);
         newUser.setActivated(true);
 
-        Set<Role> roles = new HashSet<>();
-        roles.add(RoleConstants.admin());
-        roles.add(RoleConstants.user());
+        newUser.setPassword(passwordEncoder.encode(userInfo.getPassword()));
 
-        newUser.setRoles(roles);
-        userRepository.save(newUser);
-        return new UserResponseDto(newUser);
+        return mapper.map(userRepository.save(newUser), UserResponseDto.class);
     }
 
     @Transactional(readOnly = true)
-    public Page<UserResponseDto> list(Pageable pageable) {
-        return userRepository.findAll(pageable).map(UserResponseDto::new);
+    public Optional<UserResponseDto> getUserByUsername(String username) {
+        return userRepository.findOneByUsernameIgnoreCase(username).map(u -> mapper.map(u, UserResponseDto.class));
     }
 
-    @Transactional(readOnly = true)
-    public Optional<UserResponseDto> getCurrentUser() {
-        return getCurrentUsername().flatMap(userRepository::findOneByUsernameIgnoreCase).map(UserResponseDto::new);
+    @Override
+    public Optional<UserResponseDto> getUserByEmail(String email) {
+        return userRepository.findOneByEmailIgnoreCase(email).map(u -> mapper.map(u, UserResponseDto.class));
     }
 
-    private static Optional<String> getCurrentUsername() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
+    @Override
+    public Optional<UserResponseDto> getUserByLogin(String login) {
+        return userRepository.findOneByUsernameOrEmailIgnoreCase(login, login).map(u -> mapper.map(u, UserResponseDto.class));
+    }
 
-        if (authentication != null) {
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof UserDetails)
-                return Optional.ofNullable(((UserDetails) principal).getUsername());
-            if (principal instanceof String)
-                return Optional.of((String) principal);
+    public void deleteUser(String username) {
+        userRepository.findOneByUsernameIgnoreCase(username).ifPresent(userRepository::delete);
+    }
+
+    public Optional<String> getCurrentUser() {
+        SecurityContext sc = SecurityContextHolder.getContext();
+        Authentication auth = sc.getAuthentication();
+
+        if (auth == null)
+            return Optional.empty();
+
+        Object principal = auth.getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            return Optional.ofNullable(((UserDetails) principal).getUsername());
+        }
+
+        if (principal instanceof String) {
+            return Optional.of((String) principal);
         }
 
         return Optional.empty();

@@ -1,0 +1,10 @@
+insert into author (id, firstname, lastname, bio ) values (1, 'Errick', 'Piggen', 'neque duis bibendum morbi non quam nec dui luctus rutrum nulla tellus in sagittis dui vel');
+insert into author (id, firstname, lastname, bio ) values (2, 'Barb', 'Kingaby', 'luctus et ultrices posuere cubilia');
+insert into author (id, firstname, lastname, bio ) values (3, 'Karin', 'Huntall', 'potenti nullam porttitor lacus at');
+insert into author (id, firstname, lastname, bio ) values (4, 'Lorraine', 'Champain', 'nisi at nibh in hac habitasse');
+insert into author (id, firstname, lastname, bio ) values (5, 'Kip', 'Dowrey', 'in eleifend quam a odio in hac habit');
+insert into author (id, firstname, lastname, bio ) values (6, 'Cyril', 'Dauby', 'aliquam erat volutpat in congue eti');
+insert into author (id, firstname, lastname, bio ) values (7, 'Lou', 'Ash', 'aliquet maecenas leo odio condimentum id');
+insert into author (id, firstname, lastname, bio ) values (8, 'Orelie', 'Gyves', 'enim lorem ipsum dolor sit amet consectetuer adipiscing elit proin interdum mauris non');
+insert into author (id, firstname, lastname, bio ) values (9, 'Romain', 'Girardengo', 'at turpis a pede posuere nonummy integer non velit donec diam neque vestibulum eget vulputate ut ');
+insert into author (id, firstname, lastname, bio ) values (10, 'Fayth', 'Dicker', '');

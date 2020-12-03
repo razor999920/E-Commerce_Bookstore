@@ -1,21 +1,17 @@
 package com.mnp.store.contracts.users.dtos;
 
-import com.mnp.store.domain.users.User;
-
 public class UserResponseDto {
     private String username;
     private String email;
+    private boolean emailConfirmed;
 
     public UserResponseDto() {
     }
 
-    public UserResponseDto(String username, String email) {
+    public UserResponseDto(String username, String email, boolean emailConfirmed) {
         this.username = username;
         this.email = email;
-    }
-
-    public UserResponseDto(User user) {
-        this(user.getUsername(), user.getEmail());
+        this.emailConfirmed = emailConfirmed;
     }
 
     public String getUsername() {
@@ -33,4 +29,13 @@ public class UserResponseDto {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public boolean isEmailConfirmed() {
+        return emailConfirmed;
+    }
+
+    public void setEmailConfirmed(boolean emailConfirmed) {
+        this.emailConfirmed = emailConfirmed;
+    }
 }
+

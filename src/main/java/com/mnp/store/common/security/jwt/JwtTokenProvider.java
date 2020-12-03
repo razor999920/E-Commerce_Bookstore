@@ -1,6 +1,8 @@
 package com.mnp.store.common.security.jwt;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,11 +12,13 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -24,21 +28,36 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenProvider {
 
-    @Value("${mnp.jwt.secret")
+    @Value("${mnp.jwt.secret}")
     private String jwtSecret;
 
     @Value(("${mnp.jwt.accessTokenExpiration}"))
-    private Long jwtExpirationInMs;
+    private Long jwtExpiration;
 
     @Value(("${mnp.jwt.refreshTokenExpiration}"))
-    private Long refreshExpirationInMs;
+    private Long refreshExpiration;
+
+    private Key key;
+
+    @PostConstruct
+    public void init() {
+        // make key
+        //
+        byte[] keyBytes = Decoders.BASE64.decode(this.jwtSecret);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
+
+        // convert to milliseconds.
+        //
+        this.jwtExpiration *= 1000;
+        this.jwtExpiration *= 1000;
+    }
 
     public boolean validate(String token) {
         if (!StringUtils.hasText(token))
             return false;
 
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             System.out.println("invalid jwt token");
@@ -48,11 +67,11 @@ public class JwtTokenProvider {
     }
 
     public JwtToken generateAccessToken(Authentication authentication) {
-        return generateJwtToken(authentication, JwtTokenType.ACCESS_TOKEN, jwtExpirationInMs);
+        return generateJwtToken(authentication, JwtTokenType.ACCESS_TOKEN, jwtExpiration);
     }
 
     public JwtToken generateRefreshToken(Authentication authentication) {
-        return generateJwtToken(authentication, JwtTokenType.REFRESH_TOKEN, refreshExpirationInMs);
+        return generateJwtToken(authentication, JwtTokenType.REFRESH_TOKEN, refreshExpiration);
     }
 
     public JwtToken generateJwtToken(Authentication authentication, JwtTokenType tokenType, long expiration) {
@@ -70,7 +89,7 @@ public class JwtTokenProvider {
                 .claim("token_type", tokenType.name())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
         return new JwtToken(
@@ -85,8 +104,9 @@ public class JwtTokenProvider {
         if (!StringUtils.hasText(token))
             return null;
 
-        Claims claims = Jwts.parser()
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(jwtSecret)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
 
@@ -112,7 +132,7 @@ public class JwtTokenProvider {
     }
 
     public JwtTokenType getTokenType(String token) {
-        Jws<Claims> claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
+        Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(token);
         return JwtTokenType.valueOf(claims.getBody().get("token_type", String.class));
     }
 

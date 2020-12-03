@@ -1,5 +1,6 @@
 package com.mnp.store.domain.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mnp.store.common.BaseEntity;
 import com.mnp.store.domain.authorization.Role;
 import org.hibernate.annotations.BatchSize;
@@ -19,17 +20,25 @@ public class User extends BaseEntity {
     private String email;
 
     @Column(nullable = false)
+    private boolean emailConfirmed = false;
+
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
     private boolean activated = false;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "user_role",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     @BatchSize(size = 20)
     private Set<Role> roles = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private Set<Address> addresses = new HashSet<>();
 
     public String getUsername() {
         return username;

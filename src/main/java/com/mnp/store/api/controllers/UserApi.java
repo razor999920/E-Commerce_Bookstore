@@ -1,15 +1,17 @@
 package com.mnp.store.api.controllers;
 
+import com.mnp.store.common.http.ResponseUtils;
 import com.mnp.store.contracts.users.UserService;
+import com.mnp.store.contracts.users.dtos.CreateUserRequestDto;
 import com.mnp.store.contracts.users.dtos.UserResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,13 +25,23 @@ public class UserApi {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<UserResponseDto>> list(Pageable pageable) {
-        final Page<UserResponseDto> page = userService.list(pageable);
-        return ResponseEntity.ok(page.getContent());
+    public Page<UserResponseDto> get(Pageable pageable) {
+        return userService.listAllUsers(pageable);
     }
 
-    @GetMapping("/users/current")
-    public UserResponseDto current() {
-        return userService.getCurrentUser().orElseThrow(() -> new UsernameNotFoundException("TODO"));
+    @PostMapping("/users")
+    public ResponseEntity<UserResponseDto> create(@Valid @RequestBody CreateUserRequestDto userInfo) {
+        return new ResponseEntity<>(userService.createUser(userInfo), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/users/{username}")
+    public ResponseEntity<UserResponseDto> getByUsername(@PathVariable String username) {
+        return ResponseUtils.ofOptional(userService.getUserByUsername(username));
+    }
+
+    @DeleteMapping("/users/{username}")
+    public void delete(@PathVariable String username) {
+        userService.deleteUser(username);
     }
 }
+

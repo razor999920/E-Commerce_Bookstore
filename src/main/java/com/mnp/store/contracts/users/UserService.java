@@ -1,15 +1,29 @@
 package com.mnp.store.contracts.users;
 
-import com.mnp.store.contracts.users.dtos.RegisterUserRequestDto;
+import java.util.Optional;
+
+import com.mnp.store.contracts.users.dtos.CreateUserRequestDto;
 import com.mnp.store.contracts.users.dtos.UserResponseDto;
-import com.mnp.store.domain.users.User;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
-
 public interface UserService {
-    UserResponseDto register(RegisterUserRequestDto request);
-    Page<UserResponseDto> list(Pageable pageable);
-    Optional<UserResponseDto> getCurrentUser();
+
+    Page<UserResponseDto> listAllUsers(Pageable pageable);
+
+    Optional<UserResponseDto> getUserById(long id);
+
+    Optional<UserResponseDto> getUserByUsername(String username);
+
+    Optional<UserResponseDto> getUserByEmail(String email);
+
+    Optional<UserResponseDto> getUserByLogin(String login);
+
+    UserResponseDto createUser(CreateUserRequestDto userInfo);
+
+    void deleteUser(String username);
+
+    Optional<String> getCurrentUser();
 }
+
