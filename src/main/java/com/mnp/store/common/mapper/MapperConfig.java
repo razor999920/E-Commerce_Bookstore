@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.mnp.store.domain.users.User;
+import com.mnp.store.domain.User;
 import com.mnp.store.contracts.users.dtos.UserResponseDto;
 
 @Configuration

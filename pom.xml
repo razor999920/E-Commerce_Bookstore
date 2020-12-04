@@ -24,6 +24,7 @@
         <modelmapper.version>2.3.9</modelmapper.version>
         <webjars-jquery.version>2.2.4</webjars-jquery.version>
         <problem.version>0.26.2</problem.version>
+        <slugify.version>2.4</slugify.version>
     </properties>
 
     <dependencies>
@@ -137,6 +138,11 @@
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>${modelmapper.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.slugify</groupId>
+            <artifactId>slugify</artifactId>
+            <version>${slugify.version}</version>
         </dependency>
 
         <!-- DEV TOOLS -->

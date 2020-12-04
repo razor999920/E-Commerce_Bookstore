@@ -1,8 +1,8 @@
 package com.mnp.store.common.security;
 
 import com.mnp.store.common.security.exceptions.UserNotActivatedException;
-import com.mnp.store.domain.users.User;
-import com.mnp.store.domain.users.UserRepository;
+import com.mnp.store.domain.User;
+import com.mnp.store.domain.repository.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -40,11 +40,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     private org.springframework.security.core.userdetails.User createPrincipal(User user) {
-        if (!user.isActivated())
-            throw new UserNotActivatedException(String.format("User '%s' is not activated.", user.getUsername()));
-
         List<GrantedAuthority> grantedAuthorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
 
         return new org.springframework.security.core.userdetails.User(

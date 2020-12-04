@@ -11,6 +11,17 @@ const api = {
   register: "/auth/register",
   login: "/auth/login",
   logout: "/auth/logout",
+  books: "/books",
+  booksCategories: "/books/categories",
+  booksSearch: "/books/search",
+  bookIsbn: "/books/isbn",
+  bookId: "/books/id",
+  bestsellers: "/books/bestsellers",
+  salesPerMonth: "/books/sales-per-month",
+  purchases: "/purchases",
+  reviews: "/reviews",
+  users: "/users",
+  usersStatistics: "/users/statistics",
 }
 
 const instance = axios.create({
