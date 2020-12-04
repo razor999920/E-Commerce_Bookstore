@@ -27,7 +27,7 @@
 ### Analytics
 - [x] Sales per month
 - [x] Best sellers
-- [ ] Customers' spending 
+- [x] Customers' spending 
 
 ## Documentation
 - [ ] TODO
