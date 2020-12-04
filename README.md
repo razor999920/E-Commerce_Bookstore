@@ -19,11 +19,10 @@
 - [x] Subtotal
 
 ### Checkout/Orders
-- [ ] Get order's items 
-- [ ] Shipping info
-- [ ] Billing info
-- [ ] Payment info
-- [ ] Order status
+- [x] Get order's items 
+- [x] Shipping info
+- [x] Billing info
+- [x] Order status
 
 ### Analytics
 - [x] Sales per month
