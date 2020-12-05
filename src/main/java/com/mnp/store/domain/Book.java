@@ -1,10 +1,10 @@
 package com.mnp.store.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -57,10 +57,6 @@ public class Book implements Serializable {
     @Size(max = 64)
     @Column(name = "category", length = 64)
     private String category;
-
-    @OneToOne(mappedBy = "book")
-    @JsonIgnore
-    private PurchaseItem purchaseItem;
 
     @OneToMany(mappedBy = "book")
     private Set<Review> reviews = new HashSet<>();
@@ -175,19 +171,6 @@ public class Book implements Serializable {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public PurchaseItem getPurchaseItem() {
-        return purchaseItem;
-    }
-
-    public Book purchaseItem(PurchaseItem purchaseItem) {
-        this.purchaseItem = purchaseItem;
-        return this;
-    }
-
-    public void setPurchaseItem(PurchaseItem purchaseItem) {
-        this.purchaseItem = purchaseItem;
     }
 
     public Set<Review> getReviews() {

@@ -1,7 +1,7 @@
 package com.mnp.store.domain.constants;
 
 public enum ROLE {
-    ADMIN,
-    USER,
-    ANONYMOUS
+    ROLE_ADMIN,
+    ROLE_USER,
+    ROLE_ANONYMOUS
 }

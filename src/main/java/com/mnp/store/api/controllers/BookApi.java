@@ -1,5 +1,7 @@
 package com.mnp.store.api.controllers;
 
+import com.mnp.store.common.http.ResponseUtils;
+import com.mnp.store.common.http.VuetablePage;
 import com.mnp.store.contracts.BookService;
 import com.mnp.store.contracts.dtos.BestSellingBook;
 import com.mnp.store.contracts.dtos.BookCategory;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import java.net.URI;
@@ -53,15 +56,15 @@ public class BookApi {
     }
 
     @GetMapping("/books")
-    public ResponseEntity<List<Book>> getAllBooks(Pageable pageable) {
+    public ResponseEntity<Page<Book>> getAllBooks(Pageable pageable) {
         Page<Book> page = bookService.findAll(pageable);
-        return ResponseEntity.ok().body(page.getContent());
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping(value = "/books/categories/{category}")
-    public ResponseEntity<List<Book>> getBookByCategory(Pageable pageable, @PathVariable String category) {
+    public ResponseEntity<Page<Book>> getBookByCategory(Pageable pageable, @PathVariable String category) {
         Page<Book> page = bookService.findByCategory(pageable, category);
-        return ResponseEntity.ok().body(page.getContent());
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping(value = "/books/categories")
@@ -71,9 +74,9 @@ public class BookApi {
     }
 
     @GetMapping(value = "/books/search/{term}")
-    public ResponseEntity<List<Book>> searchBook(Pageable pageable, @PathVariable String term) {
+    public ResponseEntity<Page<Book>> searchBook(Pageable pageable, @PathVariable String term) {
         Page<Book> page = bookService.searchBook(pageable, term);
-        return ResponseEntity.ok().body(page.getContent());
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/books/isbn/{isbn}")

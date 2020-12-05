@@ -1,5 +1,6 @@
 export const SET_EMAIL = "SET_EMAIL"
 export const SET_USERNAME = "SET_USERNAME"
+export const SET_ROLES = "SET_ROLES"
 export const SET_SESSION_ACTIVE = "SET_SESSION_ACTIVE"
 export const SET_EMAIL_CONFIRMED = "SET_EMAIL_CONFIRMED"
 export const LOG_OUT = "LOG_OUT"

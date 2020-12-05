@@ -1,4 +1,6 @@
 package com.mnp.store.domain;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -30,8 +32,9 @@ public class User implements Serializable {
     private Boolean emailConfirmed;
 
     @NotNull
-    @Size(min = 1, max = 24)
-    @Column(name = "password", length = 24, nullable = false)
+    @JsonIgnore
+    @Size(min = 60, max = 60)
+    @Column(name = "password", length = 60, nullable = false)
     private String password;
 
     @OneToMany(mappedBy = "user")

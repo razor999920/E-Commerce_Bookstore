@@ -10,7 +10,7 @@
       </router-link>
     </div>
     <div>
-      <button @click="loadMore()">load more</button>
+      <button @click="loadMore()">{{ isLast ? "no more" : "load more" }}</button>
     </div>
   </div>
 </template>
@@ -31,16 +31,17 @@ export default {
   methods: {
     loadItems() {
       const { category } = this.$route.query
-      this.$store.dispatch("catalogStore/loadItems", category)
+      this.$store.dispatch("catalogStore/loadBooks", category)
     },
     loadMore() {
       const { category } = this.$route.query
-      this.$store.dispatch("catalogStore/loadMore", category)
+      this.$store.dispatch("catalogStore/loadBooks", category)
     },
   },
   computed: {
     ...mapGetters({
       items: "catalogStore/getItems",
+      isLast: "catalogStore/getLast",
     }),
   },
   watch: {

@@ -85,7 +85,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserResponseDto> getUserByLogin(String login) {
-        return userRepository.findOneByUsernameOrEmailIgnoreCase(login, login).map(u -> mapper.map(u, UserResponseDto.class));
+        return userRepository.findOneWithRolesByEmailOrUsernameIgnoreCase(login, login)
+                .map(u -> mapper.map(u, UserResponseDto.class));
     }
 
     public void deleteUser(String username) {

@@ -3,7 +3,7 @@ import Vue from "vue"
 import api from "@/utils/api"
 import {
   LOG_OUT,
-  SET_EMAIL, SET_EMAIL_CONFIRMED, SET_SESSION_ACTIVE, SET_USERNAME,
+  SET_EMAIL, SET_EMAIL_CONFIRMED, SET_ROLES, SET_SESSION_ACTIVE, SET_USERNAME,
 } from "@/store/types"
 import localStore from "@/utils/localStore"
 
@@ -12,6 +12,7 @@ export default {
   state: {
     email: "",
     username: "",
+    roles: [],
     isSessionActive: false,
     isEmailConfirmed: false,
   },
@@ -38,6 +39,9 @@ export default {
           commit(SET_USERNAME, data.username)
           commit(SET_EMAIL_CONFIRMED, data.isEmailConfirmed)
           commit(SET_SESSION_ACTIVE, true)
+
+          const roleNames = data.roles.map(role => role.name)
+          commit(SET_ROLES, roleNames)
         }
         return data
       } catch (e) {
@@ -66,9 +70,14 @@ export default {
       commit(SET_USERNAME, localStore.getUsername())
       commit(SET_SESSION_ACTIVE, true)
       commit(SET_EMAIL_CONFIRMED, localStore.isEmailConfirmed())
+      commit(SET_ROLES, localStore.getRoles())
     },
   },
   mutations: {
+    [SET_ROLES](state, roles) {
+      state.roles = roles
+      localStore.setRoles(roles)
+    },
     [SET_EMAIL](state, email) {
       state.email = email
       localStore.setEmail(email)
@@ -88,16 +97,19 @@ export default {
         localStore.removeEmail()
         localStore.removeUsername()
         localStore.removeEmailConfirmed()
+        localStore.removeRoles()
       }
     },
     [LOG_OUT](state) {
       state.email = ""
       state.username = ""
       state.isSessionActive = false
+      state.roles = []
       localStore.removeEmail()
       localStore.removeUsername()
       localStore.removeEmailConfirmed()
       localStore.removeSessionTimeout()
+      localStore.removeRoles()
     },
   },
   getters: {
@@ -107,11 +119,17 @@ export default {
     getUsername(state) {
       return state.username
     },
+    getRoles(state) {
+      return state.roles
+    },
     isSessionActive(state) {
       return state.isSessionActive
     },
     isEmailConfirmed(state) {
       return state.isEmailConfirmed
+    },
+    isAdmin(state) {
+      return state.roles.includes("ROLE_ADMIN")
     },
   },
 }

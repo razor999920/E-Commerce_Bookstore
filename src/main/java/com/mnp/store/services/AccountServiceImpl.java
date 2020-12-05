@@ -10,7 +10,6 @@ import com.mnp.store.contracts.users.UserService;
 import com.mnp.store.contracts.users.dtos.InvalidCredentialsException;
 import com.mnp.store.contracts.users.dtos.UserResponseDto;
 import com.mnp.store.domain.constants.ROLE;
-import com.mnp.store.domain.constants.RoleConstants;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
@@ -69,9 +68,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, HttpHeaders httpHeaders) {
-        if (!isAuthenticated()) {
-            return;
-        }
 
         HttpCookie removeAccessCookie = cookieProvider.deleteAccessTokenCookie();
         httpHeaders.add(HttpHeaders.SET_COOKIE, removeAccessCookie.toString());
@@ -79,8 +75,11 @@ public class AccountServiceImpl implements AccountService {
         HttpCookie removeRefreshCookie = cookieProvider.deleteRefreshTokenCookie();
         httpHeaders.add(HttpHeaders.SET_COOKIE, removeRefreshCookie.toString());
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        new SecurityContextLogoutHandler().logout(request, response, auth);
+        if (isAuthenticated()) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+
         SecurityContextHolder.getContext().setAuthentication(null);
     }
 
@@ -102,6 +101,6 @@ public class AccountServiceImpl implements AccountService {
                 auth.getAuthorities()
                         .stream()
                         .map(GrantedAuthority::getAuthority)
-                        .noneMatch(ROLE.ANONYMOUS.name()::equals);
+                        .noneMatch(ROLE.ROLE_ANONYMOUS.name()::equals);
     }
 }

@@ -8,7 +8,7 @@
         <router-link to="/login" tag="button">Login</router-link>
       </div>
       <div v-else>
-        <button @click="handleLogout()">Hello, {{username}}! Logout</button>
+        <button @click="handleLogout()">Hello, {{ username }}! Logout</button>
       </div>
       <div class="ml-2">
         Cart (0)
@@ -45,7 +45,7 @@ export default {
   computed: {
     ...mapGetters({
       isSessionActive: "authStore/isSessionActive",
-      username: "authStore/getUsername"
+      username: "authStore/getUsername",
     }),
   },
 }

@@ -1,7 +1,13 @@
+import Vue from "vue"
+
+import api from "@/utils/api"
+
 export const SET_LOADING = "SET_LOADING"
 export const SET_CATEGORIES = "SET_CATEGORIES"
 export const SET_FILTERS = "SET_FILTERS"
 export const SET_ITEMS = "SET_ITEMS"
+export const SET_PAGE = "SET_PAGE"
+export const SET_LAST = "SET_LAST"
 export const PUSH_TO_ITEMS = "PUSH_TO_ITEMS"
 
 export default {
@@ -15,41 +21,32 @@ export default {
     searchTerm: "",
     loading: false,
     reviews: [],
+    page: 0,
+    last: false,
   },
   actions: {
-    initialize() {
-      // todo
-    },
+    async loadBooks({ commit, state }) {
+      try {
+        if (state.last) return
 
-    loadItems({ commit }, category) {
-      const data = []
-      for (let i = 0; i < 10; i += 1) {
-        data.push(
-          {
-            id: `${category}_${i}`,
-            title: `${category} book ${i}`,
-            author: `author${i}`,
-            price: `${i}.99`,
-          },
-        )
-      }
-      commit(SET_ITEMS, data)
-    },
+        const params = {
+          size: 25,
+          page: state.page + 1,
+        }
 
-    loadMore({ commit }, category) {
-      const data = []
-      for (let i = 0; i < 10; i += 1) {
-        const id = `${category}_${Math.floor(Math.random() * 1000)}`
-        data.push(
-          {
-            id,
-            title: `${category} book ${i}`,
-            author: `author${id}`,
-            price: `${i}.99`,
-          },
-        )
+        const response = await Vue.prototype.$http.get(api.getBooks, { params })
+        if (response && response.status === 200) {
+          if (response.data.first) {
+            commit(SET_ITEMS, response.data.content)
+          } else {
+            commit(PUSH_TO_ITEMS, response.data.content)
+          }
+          commit(SET_PAGE, state.page + 1)
+          commit(SET_LAST, response.data.last)
+        }
+      } catch (e) {
+        throw new Error(e.response.data.detail)
       }
-      commit(PUSH_TO_ITEMS, data)
     },
 
     loadCategories({ commit }) {
@@ -101,6 +98,12 @@ export default {
     [SET_FILTERS](state, filters) {
       state.filters = filters
     },
+    [SET_PAGE](state, page) {
+      state.page = page
+    },
+    [SET_LAST](state, last) {
+      state.last = last
+    },
   },
   getters: {
     getCategories(state) {
@@ -111,6 +114,9 @@ export default {
     },
     getFilters(state) {
       return state.filters
+    },
+    getLast(state) {
+      return state.last
     },
   },
 }

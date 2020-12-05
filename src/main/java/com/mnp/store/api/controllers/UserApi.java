@@ -47,7 +47,7 @@ public class UserApi {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers(Pageable pageable,
+    public ResponseEntity<Page<User>> getAllUsers(Pageable pageable,
                                                   @RequestParam(required = false, defaultValue = "false") boolean withRolesAndReview) {
         Page<User> page;
         if (withRolesAndReview) {
@@ -55,7 +55,7 @@ public class UserApi {
         } else {
             page = userService.findAll(pageable);
         }
-        return ResponseEntity.ok().body(page.getContent());
+        return ResponseEntity.ok().body(page);
     }
 
     @GetMapping("/users/{username}")

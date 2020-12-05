@@ -59,13 +59,6 @@ export default {
     },
 
     unsetLoading() {
-      if (this.isSessionActive) {
-        const isActive = this.checkSessionTimeout()
-
-        if (!isActive) {
-          this.$store.commit("authStore/logout")
-        }
-      }
       this.isLoading = false
     },
 

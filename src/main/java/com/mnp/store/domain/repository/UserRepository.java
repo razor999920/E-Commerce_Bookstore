@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findOneByUsernameOrEmailIgnoreCase(String username, String email);
 
     @EntityGraph(attributePaths = "roles")
-    Optional<User> findOneWithRolesByEmailIgnoreCase(String email);
+    Optional<User> findOneWithRolesByEmailOrUsernameIgnoreCase(String email, String username);
 
     @EntityGraph(attributePaths = "roles")
     Optional<User> findOneWithRolesByUsernameIgnoreCase(String username);

@@ -1,4 +1,13 @@
 export default {
+  getRoles() {
+    return localStorage.getItem("roles")
+  },
+  setRoles(roles) {
+    localStorage.setItem("roles", roles)
+  },
+  removeRoles() {
+    localStorage.removeItem("roles")
+  },
   getUsername() {
     return localStorage.getItem("username")
   },
