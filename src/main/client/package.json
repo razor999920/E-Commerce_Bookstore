@@ -32,6 +32,7 @@
     "history": "^5.0.0",
     "humps": "^2.0.1",
     "moment": "^2.29.1",
+<<<<<<< Updated upstream
     "overmind": "^26.0.0",
     "overmind-devtools": "^27.0.0",
     "overmind-react": "^27.0.0",
@@ -44,6 +45,16 @@
     "semantic-ui-react": "^2.0.1",
     "styled-components": "^5.2.1",
     "styled-normalize": "^8.0.7"
+=======
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "vue": "^2.6.11",
+    "vue-notification": "^1.3.20",
+    "vue-router": "^3.4.9",
+    "vue-scrollto": "^2.20.0",
+    "vuelidate": "^0.7.6",
+    "vuex": "^3.6.0",
+    "vuex-persist": "^3.1.3"
+>>>>>>> Stashed changes
   },
   "devDependencies": {
     "@babel/core": "^7.12.7",
