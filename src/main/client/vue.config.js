@@ -2,7 +2,7 @@ module.exports = {
   devServer: {
     proxy: {
       "/api": {
-        target: "http://4ef90ec9be69.ngrok.io/#/",
+        target: "http://localhost:4000",
         secure: false,
       },
     },

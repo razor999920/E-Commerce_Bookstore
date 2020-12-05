@@ -3,21 +3,21 @@ import api from "@/utils/api"
 
 export const SET_USERS = "SET_USERS"
 export const SET_BEST_SELLERS = "SET_BEST_SELLERS"
-export const SET_SALES_PER_MONTH = "SET_SALES_PER_MONTH"
+export const SET_SALES = "SET_SALES"
 
 export default {
   namespaced: true,
-  states: {
+  state: {
     bestsellers: [],
     buyStats: [],
-    salesPerMonth: [],
+    sales: [[]],
     users: [],
     page: 0,
     last: false,
   },
   getters: {
     getSales(state) {
-      return state.salesPerMonth
+      return state.sales
     },
   },
   actions: {
@@ -42,13 +42,13 @@ export default {
       }
     },
 
-    async loadSalesPerMonth({ commit }) {
+    async loadSales({ commit }) {
       try {
         const response = await Vue.prototype.$http.get(api.getSalesPerMonth)
         if (response && response.data) {
           const data = Object.keys(response.data)
             .map((k) => [k, response.data[k]])
-          commit(SET_SALES_PER_MONTH, data)
+          commit(SET_SALES, data)
         }
       } catch (e) {
         throw new Error(e.response.data.detail)
@@ -62,8 +62,8 @@ export default {
     [SET_BEST_SELLERS](state, bestsellers) {
       state.bestsellers = bestsellers
     },
-    [SET_SALES_PER_MONTH](state, salesPerMonth) {
-      state.salesPerMonth = salesPerMonth
+    [SET_SALES](state, sales) {
+      state.sales = sales
     },
   },
 }

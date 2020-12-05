@@ -29,14 +29,14 @@ import { mapGetters } from "vuex"
 export default {
   name: "AdminDashboard",
   async created() {
-    await this.loadSalesPerMonth()
+    await this.loadSales()
   },
   data() {
     return {}
   },
   methods: {
-    async loadSalesPerMonth() {
-      await this.$store.dispatch("adminStore/loadSalesPerMonth")
+    loadSales() {
+      this.$store.dispatch("adminStore/loadSales")
     },
   },
   computed: {
