@@ -8,27 +8,26 @@
 - [x] Register
 
 ### Products
-- [ ] Browse products
-- [ ] Search products
-- [ ] Product-Category
-- [ ] Rating and Review
+- [x] Browse products
+- [x] Search products
+- [x] Product-Category
+- [x] Rating and Review
 
 ### Shopping Cart
-- [ ] Add/Remove product
-- [ ] Edit quantity
-- [ ] Subtotal
+- [x] Add/Remove product
+- [x] Edit quantity
+- [x] Subtotal
 
 ### Checkout/Orders
-- [ ] Get order's items 
-- [ ] Shipping info
-- [ ] Billing info
-- [ ] Payment info
-- [ ] Order status
+- [x] Get order's items 
+- [x] Shipping info
+- [x] Billing info
+- [x] Order status
 
 ### Analytics
-- [ ] Sales per month
-- [ ] Most popular product
-- [ ] Customers' spending 
+- [x] Sales per month
+- [x] Best sellers
+- [x] Customers' spending 
 
 ## Documentation
 - [ ] TODO
