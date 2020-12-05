@@ -2,16 +2,16 @@
   <nav class="fixed z-50 w-full bg-white">
     <div class="mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center border-b-2 border-gray-100 py-6 justify-between h-16">
-        <div class="flex items-center">
+        <router-link to="/" class="flex items-center">
           <div class="flex-shrink-0">
             <img class="h-8 w-8" src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg" alt="Workflow">
           </div>
-        </div>
+        </router-link>
         <div class="hidden md:block">
           <div class="ml-4 flex items-center md:ml-6">
             <div class="ml-3 relative">
               <div class="flex items-center justify-center">
-                <router-link class="flex text-indigo-600" to="/cart">
+                <router-link class="flex" to="/cart">
                   <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                        xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -21,19 +21,23 @@
                 </router-link>
 
                 <div class="flex ml-3" v-if="isSessionActive">
+                  <router-link v-if="isAdmin" to="/admin"
+                               class="ml-3 w-full flex items-center justify-center px-4 py-2 border border-transparent shadow-sm text-base font-medium text-white bg-black hover:bg-gray-800 hover:text-gray-200">
+                    Admin
+                  </router-link>
                   <router-link to="/orders"
-                               class="ml-3 w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                               class="ml-3 w-full flex items-center justify-center px-4 py-2 border border-transparent shadow-sm text-base font-medium text-white bg-black hover:bg-gray-800 hover:text-gray-200">
                     Orders
                   </router-link>
                   <button @click="handleLogout()"
-                          class="ml-3 w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                          class="ml-3 w-full flex items-center justify-center px-4 py-2 border border-transparent shadow-sm text-base font-medium text-white bg-black hover:bg-gray-800 hover:text-gray-200">
                     Logout
                   </button>
 
                 </div>
                 <div class="ml-3" v-else>
                   <router-link to="/login"
-                               class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                               class="w-full flex items-center justify-center px-4 py-2 border border-transparent shadow-sm text-base font-medium text-white bg-black hover:bg-gray-800 hover:text-gray-200">
                     Join
                   </router-link>
                 </div>
@@ -80,6 +84,7 @@ export default {
       isSessionActive: "authStore/isSessionActive",
       username: "authStore/getUsername",
       cartCount: "cartStore/getNumberOfItems",
+      isAdmin: "authStore/isAdmin",
     }),
   },
 }

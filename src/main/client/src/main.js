@@ -23,6 +23,13 @@ const tailwindSettings = {
         td: "p-1 whitespace-no-wrap text-sm leading-4 text-gray-700",
         theadTh: "p-1 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-700 uppercase tracking-wider",
       },
+      tail: {
+        table: "min-w-full divide-y divide-gray-200",
+        thead: "bg-gray-50",
+        theadTh: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+        tbody: "bg-white divide-y divide-gray-200",
+        td: "px-6 py-4 whitespace-nowrap",
+      },
     },
     fixedClasses: {
       table: "min-w-full divide-y divide-gray-200",

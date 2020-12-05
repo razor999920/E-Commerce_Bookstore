@@ -1,18 +1,24 @@
 import Vue from "vue"
 import api from "@/utils/api"
 
-export const SET_BOOKS = "SET_BOOKS"
 export const SET_USERS = "SET_USERS"
-export const SET_ORDERS = "SET_ORDERS"
+export const SET_BEST_SELLERS = "SET_BEST_SELLERS"
+export const SET_SALES_PER_MONTH = "SET_SALES_PER_MONTH"
 
 export default {
   namespaced: true,
   states: {
+    bestsellers: [],
+    buyStats: [],
+    salesPerMonth: [],
     users: [],
-    books: [],
-    orders: [],
     page: 0,
     last: false,
+  },
+  getters: {
+    getSales(state) {
+      return state.salesPerMonth
+    },
   },
   actions: {
     async addBook(_, book) {
@@ -23,7 +29,28 @@ export default {
           throw response
         }
       } catch (e) {
-        console.log(e)
+        throw new Error(e.response.data.detail)
+      }
+    },
+
+    async loadBestSellers({ commit }) {
+      try {
+        const response = await Vue.prototype.$http.get(api.getBestsellers)
+        commit(SET_BEST_SELLERS, response.data)
+      } catch (e) {
+        throw new Error(e.response.data.detail)
+      }
+    },
+
+    async loadSalesPerMonth({ commit }) {
+      try {
+        const response = await Vue.prototype.$http.get(api.getSalesPerMonth)
+        if (response && response.data) {
+          const data = Object.keys(response.data)
+            .map((k) => [k, response.data[k]])
+          commit(SET_SALES_PER_MONTH, data)
+        }
+      } catch (e) {
         throw new Error(e.response.data.detail)
       }
     },
@@ -32,19 +59,11 @@ export default {
     [SET_USERS](state, users) {
       state.users = users
     },
-    [SET_ORDERS](state, orders) {
-      state.orders = orders
+    [SET_BEST_SELLERS](state, bestsellers) {
+      state.bestsellers = bestsellers
     },
-  },
-  getters: {
-    getBooks(state) {
-      return state.books
-    },
-    getOrders(state) {
-      return state.orders
-    },
-    getUsers(state) {
-      return state.users
+    [SET_SALES_PER_MONTH](state, salesPerMonth) {
+      state.salesPerMonth = salesPerMonth
     },
   },
 }

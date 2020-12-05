@@ -40,7 +40,7 @@
     </t-table>
     <div class="float-right">
       <div
-        class="px-2 py-2 mt-6 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">
+        class="px-2 py-2 mt-6 font-medium tracking-widest uppercase">
         Subtotal: ${{ subtotal.toFixed(2) }}
       </div>
       <div>

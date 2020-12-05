@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="w-80">
     <form @submit.prevent>
       <t-input-group label="Username">
         <t-input id="username" name="username" v-model="username" />
