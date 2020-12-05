@@ -80,6 +80,10 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+.form_error {
+  color: red;
+  font-size: 0.75em;
+  padding-left: 10px;
+}
 </style>
