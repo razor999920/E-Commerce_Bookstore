@@ -1,25 +1,17 @@
 <template>
   <div>
     <form @submit.prevent>
-      <div>
-        <label for="login" class="sr-only">Username or email</label>
-        <input id="login" name="login" type="text" required placeholder="Username or email"
-               v-model="login">
-      </div>
-      <div>
-        <label for="password" class="sr-only">Password</label>
-        <input type="password" id="password" name="password" required placeholder="Password" v-model="password">
-      </div>
-      <div>
-        <input type="checkbox" id="remember-me" name="remember-me">
-        <label for="remember-me">Remember me</label>
-      </div>
-      <div>
-        <a href="#">Forgot your password?</a>
-      </div>
-      <div>
-        <button type="button" @click="handleLogin()">Sign in</button>
-      </div>
+      <t-input-group label="Username">
+        <t-input id="login" name="login" v-model="login" />
+      </t-input-group>
+      <t-input-group label="Password">
+        <t-input type="password" id="password" name="password" v-model="password" />
+      </t-input-group>
+      <button
+        class="w-full py-3 mt-6 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none"
+        type="button" @click="handleLogin()">
+        Sign in
+      </button>
     </form>
   </div>
 </template>

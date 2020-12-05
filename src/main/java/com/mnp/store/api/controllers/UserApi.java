@@ -18,8 +18,10 @@ import org.springframework.web.client.HttpStatusCodeException;
 
 import javax.validation.Valid;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -72,6 +74,14 @@ public class UserApi {
     public ResponseEntity<BuyingStatistics> getBuyingStatistics() {
         BuyingStatistics statistics = userService.getBuyingStatistics();
         return ResponseEntity.ok(statistics);
+    }
+
+    @GetMapping("/users/orders")
+    public ResponseEntity<List<Purchase>> getUserOrders() {
+        User user = userService.getCurrentUser()
+                .orElseThrow(() -> new BadRequestException("Could not find user", "TODO", ""));
+
+        return ResponseEntity.ok(new ArrayList<>(user.getPurchases()));
     }
 }
 

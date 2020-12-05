@@ -1,6 +1,7 @@
 import Vue from "vue"
 import VueTailwind from "vue-tailwind"
 import Notifications from "vue-notification"
+import Vuelidate from "vuelidate/src"
 
 import store from "./store"
 import App from "./App.vue"
@@ -105,6 +106,7 @@ const tailwindSettings = {
 }
 Vue.use(VueTailwind, tailwindSettings)
 Vue.use(Notifications)
+Vue.use(Vuelidate)
 
 new Vue({
   router,

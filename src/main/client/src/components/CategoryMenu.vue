@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col">
-    <div v-for="category in categories" :key="category.id">
-      <router-link :to="{path: '/products', query: { category: category.slug}}">
+  <div class="flex flex-col pl-14 pt-4">
+    <div class="text-lg py-3" v-for="category in categories" :key="category.id">
+      <router-link :to="{path: '/products', query: { category: category.name}}">
         {{ category.name }}
       </router-link>
     </div>

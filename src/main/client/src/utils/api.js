@@ -11,6 +11,7 @@ const api = {
   register: "/auth/register",
   login: "/auth/login",
   logout: "/auth/logout",
+  getCategories: "/books/categories",
   getBooks: "/books",
   addBook: "/books",
   getBooksByCategory: "/books/categories",

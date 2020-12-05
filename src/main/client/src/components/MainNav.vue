@@ -1,20 +1,49 @@
 <template>
-  <div id="main-nav" class="flex justify-between">
-    <div>
-      Logo
+  <nav class="fixed z-50 w-full bg-white">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center border-b-2 border-gray-100 py-6 justify-between h-16">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <img class="h-8 w-8" src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg" alt="Workflow">
+          </div>
+        </div>
+        <div class="hidden md:block">
+          <div class="ml-4 flex items-center md:ml-6">
+            <div class="ml-3 relative">
+              <div class="flex items-center justify-center">
+                <router-link class="flex text-indigo-600" to="/cart">
+                  <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                  </svg>
+                  {{ cartCount }}
+                </router-link>
+
+                <div class="flex ml-3" v-if="isSessionActive">
+                  <router-link to="/orders"
+                               class="ml-3 w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                    Orders
+                  </router-link>
+                  <button @click="handleLogout()"
+                          class="ml-3 w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                    Logout
+                  </button>
+
+                </div>
+                <div class="ml-3" v-else>
+                  <router-link to="/login"
+                               class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                    Join
+                  </router-link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="flex">
-      <div v-if="!isSessionActive">
-        <router-link to="/login" tag="button">Login</router-link>
-      </div>
-      <div v-else>
-        <button @click="handleLogout()">Hello, {{ username }}! Logout</button>
-      </div>
-      <div class="ml-2">
-        Cart (0)
-      </div>
-    </div>
-  </div>
+  </nav>
 </template>
 
 <script>
@@ -24,9 +53,13 @@ export default {
   name: "navigation",
 
   methods: {
+    handleOrders() {
+      this.$router.push({ path: "/orders" })
+    },
     async handleLogout() {
       try {
         await this.$store.dispatch("authStore/logout")
+        await this.$store.dispatch("cartStore/clearCart")
         this.$notify({
           group: "all",
           type: "success",
@@ -46,6 +79,7 @@ export default {
     ...mapGetters({
       isSessionActive: "authStore/isSessionActive",
       username: "authStore/getUsername",
+      cartCount: "cartStore/getNumberOfItems",
     }),
   },
 }

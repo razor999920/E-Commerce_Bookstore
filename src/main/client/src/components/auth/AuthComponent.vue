@@ -2,15 +2,17 @@
   <div class="min-h-screen flex items-center justify-center">
     <div v-if="showLogin">
       <login-component @login="login" />
-      <div>
+      <div class="mt-3">
         Don't have an account?
-        <button @click="showLogin = false">Sign up</button>
+        <button class="underline" @click="showLogin = false">Sign up</button>
       </div>
     </div>
     <div v-else>
       <register-component @register="register" />
-      Already have an account?
-      <button @click="showLogin = true">Sign in</button>
+      <div class="mt-3">
+        Already have an account?
+        <button class="underline" @click="showLogin = true">Sign in</button>
+      </div>
     </div>
   </div>
 </template>
@@ -23,10 +25,13 @@ import moment from "moment"
 
 export default {
   name: "AuthComponent",
-  components: { RegisterComponent, LoginComponent },
+  components: {
+    RegisterComponent,
+    LoginComponent,
+  },
   data() {
     return {
-      showLogin: true,
+      showLogin: false,
     }
   },
   methods: {
@@ -38,7 +43,8 @@ export default {
         await this.$store.dispatch("authStore/login", info)
         this.$emit("loginSuccess")
 
-        localStore.setSessionTimeout(moment().format())
+        localStore.setSessionTimeout(moment()
+          .format())
         this.$notify({
           group: "all",
           type: "success",

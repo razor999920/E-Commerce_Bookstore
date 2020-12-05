@@ -66,7 +66,6 @@ export default {
       try {
         await this.$store.dispatch("adminStore/addBook", this.book)
       } catch (e) {
-        console.log(e)
         this.$notify({
           group: "all",
           type: "error",

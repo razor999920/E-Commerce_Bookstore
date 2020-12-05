@@ -47,12 +47,12 @@ export default {
   },
   methods: {
     loadBooks() {
-      this.$store.dispatch("adminStore/getBooks")
+      this.$store.dispatch("catalogStore/loadBooks")
     },
   },
   computed: {
     ...mapGetters({
-      books: "",
+      books: "catalogStore/getItems",
     }),
   },
 }

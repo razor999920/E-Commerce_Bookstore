@@ -12,6 +12,8 @@ import BookDetail from "@/components/admin/catalog/BookDetail.vue"
 import UserList from "@/components/admin/user/UserList.vue"
 import OrderList from "@/components/admin/order/OrderList.vue"
 import AdminDashboard from "@/components/admin/dashboard/AdminDashboard.vue"
+import Cart from "@/views/Cart.vue"
+import Payment from "@/views/Payment.vue"
 
 Vue.use(VueRouter)
 
@@ -23,7 +25,7 @@ const router = new VueRouter({
       children: [
         {
           path: "",
-          component: Home,
+          component: Catalog,
         },
         {
           path: "/products",
@@ -39,10 +41,18 @@ const router = new VueRouter({
         },
         {
           path: "orders",
-          component: Home,
+          component: OrderList,
           meta: {
             requiresAuth: true,
           },
+        },
+        {
+          path: "/cart",
+          component: Cart,
+        },
+        {
+          path: "/cart/payment",
+          component: Payment,
         },
       ],
     },
@@ -61,7 +71,7 @@ const router = new VueRouter({
         {
           path: "",
           component: AdminDashboard,
-          name: "Dashboard"
+          name: "Dashboard",
         },
         {
           path: "books",

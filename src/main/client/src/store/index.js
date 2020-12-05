@@ -4,6 +4,7 @@ import Vuex from "vuex"
 import AuthStore from "@/store/auth"
 import CatalogStore from "@/store/catalog"
 import AdminStore from "@/store/admin"
+import CartStore from "@/store/cart"
 
 Vue.use(Vuex)
 
@@ -12,5 +13,6 @@ export default new Vuex.Store({
     authStore: AuthStore,
     catalogStore: CatalogStore,
     adminStore: AdminStore,
+    cartStore: CartStore,
   },
 })

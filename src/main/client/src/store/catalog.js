@@ -25,16 +25,18 @@ export default {
     last: false,
   },
   actions: {
-    async loadBooks({ commit, state }) {
+    async resetCategory({ commit }) {
+      commit(SET_PAGE, 0)
+      commit(SET_LAST, false)
+    },
+    async loadBooks({ commit, state }, category) {
       try {
-        if (state.last) return
-
         const params = {
-          size: 25,
+          size: 10,
           page: state.page + 1,
         }
-
-        const response = await Vue.prototype.$http.get(api.getBooks, { params })
+        const url = category ? `${api.getBooksByCategory}/${category}` : api.getBooks
+        const response = await Vue.prototype.$http.get(url, { params })
         if (response && response.status === 200) {
           if (response.data.first) {
             commit(SET_ITEMS, response.data.content)
@@ -49,35 +51,9 @@ export default {
       }
     },
 
-    loadCategories({ commit }) {
-      const categories = [
-        {
-          id: 1,
-          name: "Horror",
-          slug: "horror",
-        },
-        {
-          id: 2,
-          name: "Sci-Fi",
-          slug: "sci-fi",
-        },
-        {
-          id: 3,
-          name: "Biography",
-          slug: "biography",
-        },
-        {
-          id: 4,
-          name: "Fantasy",
-          slug: "fantasy",
-        },
-        {
-          id: 5,
-          name: "Children literature",
-          slug: "children-literature",
-        },
-      ]
-      commit(SET_CATEGORIES, categories)
+    async loadCategories({ commit }) {
+      const response = await Vue.prototype.$http.get(api.getCategories)
+      commit(SET_CATEGORIES, response.data)
     },
 
     loadFilters({ commit }) {

@@ -34,6 +34,7 @@ export default {
     eventHub.$on(EVENT_RESPONSE_ERROR, this.unsetLoading)
 
     await this.$store.dispatch("authStore/initializeAppSession")
+    await this.$store.dispatch("cartStore/initializeCart")
     if (this.isSessionActive) {
       this.initializeApp().then()
     }

@@ -21,7 +21,6 @@ export default {
   methods: {
     onLoginSuccess() {
       this.$router.push("/")
-      this.$store.commit("loaderStore/unsetLoader")
     },
   },
 }

@@ -1,7 +1,6 @@
 package com.mnp.store.api.controllers;
 
-import com.mnp.store.common.http.ResponseUtils;
-import com.mnp.store.common.http.VuetablePage;
+import com.github.slugify.Slugify;
 import com.mnp.store.contracts.BookService;
 import com.mnp.store.contracts.dtos.BestSellingBook;
 import com.mnp.store.contracts.dtos.BookCategory;
@@ -15,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import java.net.URI;

@@ -17,8 +17,13 @@ export default {
   actions: {
     async addBook(_, book) {
       try {
-        await Vue.prototype.$http.post(api.addBook, book)
+        const response = await Vue.prototype.$http.post(api.addBook, book)
+
+        if (response && response.status !== 200) {
+          throw response
+        }
       } catch (e) {
+        console.log(e)
         throw new Error(e.response.data.detail)
       }
     },

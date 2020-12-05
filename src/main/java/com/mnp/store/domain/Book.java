@@ -45,8 +45,8 @@ public class Book implements Serializable {
     @Column(name = "price", precision = 21, scale = 2)
     private BigDecimal price;
 
-    @Size(max = 64)
-    @Column(name = "image_url", length = 64)
+    @Size(max = 254)
+    @Column(name = "image_url", length = 254)
     private String imageUrl;
 
     @NotNull
