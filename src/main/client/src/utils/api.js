@@ -23,6 +23,8 @@ const api = {
   getOrders: "/purchases",
   createOrders: "/purchases",
   getReviews: "/reviews",
+  getUserReviewForBook: "/users/reviews",
+  addReviewForBook: "/reviews/book",
   addReview: "/reviews",
   getUsers: "/users",
   getUsersOrders: "/users/orders",

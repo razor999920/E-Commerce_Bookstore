@@ -9,6 +9,7 @@ export const SET_PAGE = "SET_PAGE"
 export const SET_LAST = "SET_LAST"
 export const PUSH_TO_ITEMS = "PUSH_TO_ITEMS"
 export const SET_CURRENT_URL = "SET_BOOK_URL"
+export const SET_BOOK_REVIEW = "SET_BOOK_REVIEW"
 
 export default {
   namespaced: true,
@@ -49,15 +50,14 @@ export default {
       }
     },
 
-    async addReview(_, review) {
+    async addReview({ commit }, review) {
       try {
-        console.log("here")
-        console.log(review)
-        const response = await Vue.prototype.$http.post(api.addReview, review)
-
-        if (response && response.status !== 200) {
-          throw response
+        if (review.id) {
+          await Vue.prototype.$http.put(`${api.addReviewForBook}/${review.bookId}`, review)
+        } else {
+          await Vue.prototype.$http.post(api.addReview, review)
         }
+        commit(SET_BOOK_REVIEW, review)
       } catch (e) {
         throw new Error(e.response.data.detail)
       }
@@ -83,6 +83,11 @@ export default {
       dispatch("resetCategory")
       dispatch("loadBooks")
     },
+    async loadUserReviewForBook(_, bookId) {
+      return Vue.prototype.$http.get(`${api.getUserReviewForBook}/${bookId}`)
+        .then(res => res.data)
+        .catch(err => console.log(err))
+    },
   },
   mutations: {
     [SET_CATEGORIES](state, categories) {
@@ -102,6 +107,17 @@ export default {
     },
     [SET_LAST](state, last) {
       state.last = last
+    },
+    [SET_BOOK_REVIEW](state, review) {
+      if (review && review.bookId && review.id) {
+        const bookIndex = _.findIndex(state.items, ["id", review.bookId])
+        if (bookIndex) {
+          const reviewIndex = _.findIndex(state.items[bookIndex].reviews, ["id", review.id])
+          if (reviewIndex > -1) {
+            state.items[bookIndex].reviews[reviewIndex].rating = review.rating
+          }
+        }
+      }
     },
   },
   getters: {
@@ -124,6 +140,6 @@ export default {
       }
       avgReview /= state.reviews.length
       return avgReview
-    }
+    },
   },
 }

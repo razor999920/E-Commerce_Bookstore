@@ -41,7 +41,7 @@
     <div class="float-right">
       <div
         class="px-2 py-2 mt-6 font-medium tracking-widest uppercase">
-        Subtotal: ${{ subtotal.toFixed(2) }}
+        Subtotal: ${{ cartSummary.subtotal.toFixed(2) }}
       </div>
       <div>
         <router-link to="/products" tag="button"
@@ -99,7 +99,7 @@ export default {
   computed: {
     ...mapGetters({
       items: "cartStore/getItems",
-      subtotal: "cartStore/getTotal",
+      cartSummary: "cartStore/getNumberOfItems",
     }),
   },
 }

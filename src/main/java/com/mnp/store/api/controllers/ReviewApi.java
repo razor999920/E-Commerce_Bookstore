@@ -53,11 +53,15 @@ public class ReviewApi {
                 .body(result);
     }
 
-    @PutMapping("/reviews")
-    public ResponseEntity<Review> updateReview(@Valid @RequestBody Review review) {
+    @PutMapping("/reviews/book/{bookId}")
+    public ResponseEntity<Review> updateReview(@Valid @RequestBody Review review, @PathVariable Long bookId) {
         if (review.getId() == null) {
             throw new BadRequestException("Invalid id");
         }
+        Book book = new Book();
+        book.setId(bookId);
+        review.book(book);
+
         Review result = reviewService.save(review);
         return ResponseEntity.ok()
                 .body(result);

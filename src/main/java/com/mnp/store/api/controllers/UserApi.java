@@ -1,6 +1,7 @@
 package com.mnp.store.api.controllers;
 
 import com.mnp.store.common.http.ResponseUtils;
+import com.mnp.store.contracts.ReviewService;
 import com.mnp.store.contracts.dtos.BuyingStatResultDto;
 import com.mnp.store.contracts.dtos.BuyingStatistics;
 import com.mnp.store.contracts.users.UserService;
@@ -8,6 +9,7 @@ import com.mnp.store.contracts.users.dtos.CreateUserRequestDto;
 import com.mnp.store.contracts.users.dtos.UserResponseDto;
 import com.mnp.store.domain.Address;
 import com.mnp.store.domain.Purchase;
+import com.mnp.store.domain.Review;
 import com.mnp.store.domain.User;
 import com.mnp.store.domain.exceptions.BadRequestException;
 import org.springframework.data.domain.Page;
@@ -26,9 +28,11 @@ import java.util.stream.Collectors;
 public class UserApi {
 
     private final UserService userService;
+    private final ReviewService reviewService;
 
-    public UserApi(UserService userService) {
+    public UserApi(UserService userService, ReviewService reviewService) {
         this.userService = userService;
+        this.reviewService = reviewService;
     }
 
     @PostMapping("/users")
@@ -87,6 +91,14 @@ public class UserApi {
         User user = userService.getCurrentUser()
                 .orElseThrow(() -> new BadRequestException("Invalid user session"));
         return ResponseEntity.ok().body(user.getAddresses());
+    }
+
+    @GetMapping("/users/reviews/{bookId}")
+    public ResponseEntity<Review> getReview(@Valid @PathVariable Long bookId) {
+        User user = userService.getCurrentUser()
+                .orElseThrow(() -> new BadRequestException("Invalid user session"));
+        Optional<Review> review = reviewService.getUserReviewForBook(user.getId(), bookId);
+        return ResponseUtils.ofOptional(review);
     }
 }
 

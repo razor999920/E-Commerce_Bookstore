@@ -113,13 +113,13 @@ export default {
     },
 
     getNumberOfItems(state) {
-      return _.sumBy(state.items, "quantity")
+      const quantity = _.sumBy(state.items, "quantity")
+      const subtotal = _.sumBy(state.items, "price") * quantity
+      return {
+        quantity,
+        subtotal,
+      }
     },
-
-    getTotal(state) {
-      return _.sumBy(state.items, "price")
-    },
-
     getAddresses(state) {
       return state.addresses
     },
