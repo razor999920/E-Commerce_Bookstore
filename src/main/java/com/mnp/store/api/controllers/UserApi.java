@@ -43,7 +43,7 @@ public class UserApi {
     @PutMapping("/users")
     public ResponseEntity<User> updateUser(@Valid @RequestBody User user) throws URISyntaxException {
         if (user.getId() == null) {
-            throw new BadRequestException("Invalid id", "User", "idnull");
+            throw new BadRequestException("Invalid id");
         }
         User result = userService.save(user);
         return ResponseEntity.ok()
@@ -81,7 +81,7 @@ public class UserApi {
     @GetMapping("/users/orders")
     public ResponseEntity<List<Purchase>> getUserOrders() {
         User user = userService.getCurrentUser()
-                .orElseThrow(() -> new BadRequestException("Could not find user", "TODO", ""));
+                .orElseThrow(() -> new BadRequestException("Could not find user"));
 
         return ResponseEntity.ok(new ArrayList<>(user.getPurchases()));
     }

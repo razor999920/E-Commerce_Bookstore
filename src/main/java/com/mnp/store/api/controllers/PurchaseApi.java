@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class PurchaseApi {
 
-    private static final String ENTITY_NAME = "purchase";
-
     private final PurchaseService purchaseService;
     private final UserService userService;
     private final PurchaseItemService purchaseItemService;
@@ -42,7 +40,7 @@ public class PurchaseApi {
 
     @PostMapping("/purchases")
     public ResponseEntity<Purchase> createPurchase(@Valid @RequestBody CreatePurchaseDto request) throws URISyntaxException {
-        User user = userService.getCurrentUser().orElseThrow(() -> new BadRequestException("Invalid user session", ENTITY_NAME, ""));
+        User user = userService.getCurrentUser().orElseThrow(() -> new BadRequestException("Invalid user session"));
 
         // force current user id on address.
         Address address = request.getAddress();
@@ -84,7 +82,7 @@ public class PurchaseApi {
     @PutMapping("/purchases")
     public ResponseEntity<Purchase> updatePurchase(@Valid @RequestBody Purchase purchase) throws URISyntaxException {
         if (purchase.getId() == null) {
-            throw new BadRequestException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestException("Invalid id");
         }
         Purchase result = purchaseService.save(purchase);
         return ResponseEntity.ok()

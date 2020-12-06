@@ -25,6 +25,8 @@ const api = {
   getReviews: "/reviews",
   getUsers: "/users",
   getBuyStats: "/users/statistics",
+  getCart: "carts/current",
+  updateCart: "carts",
 }
 
 const instance = axios.create({

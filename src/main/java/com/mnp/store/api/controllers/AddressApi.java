@@ -19,7 +19,6 @@ import java.util.Optional;
 public class AddressApi {
 
     private final AddressService addressService;
-    private static final String ENTITY_NAME = "Address";
 
     public AddressApi(AddressService addressService) {
         this.addressService = addressService;
@@ -28,7 +27,7 @@ public class AddressApi {
     @PostMapping("/addresses")
     public ResponseEntity<Address> createAddress(@Valid @RequestBody Address address) throws URISyntaxException {
         if (address.getId() != null) {
-            throw new BadRequestException("A new address cannot already have an ID", ENTITY_NAME, "idexists");
+            throw new BadRequestException("A new address cannot already have an ID");
         }
         Address result = addressService.save(address);
         return ResponseEntity.created(new URI("/api/addresses/" + result.getId())).body(result);
@@ -37,7 +36,7 @@ public class AddressApi {
     @PutMapping("/addresses")
     public ResponseEntity<Address> updateAddress(@Valid @RequestBody Address address) throws URISyntaxException {
         if (address.getId() == null) {
-            throw new BadRequestException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestException("Invalid id");
         }
         Address result = addressService.save(address);
         return ResponseEntity.ok().body(result);

@@ -25,8 +25,6 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class BookApi {
 
-    private static final String ENTITY_NAME = "book";
-
     private final BookService bookService;
 
     public BookApi(BookService bookService) {
@@ -36,7 +34,7 @@ public class BookApi {
     @PostMapping("/books")
     public ResponseEntity<Book> createBook(@Valid @RequestBody Book book) throws URISyntaxException {
         if (book.getId() != null) {
-            throw new BadRequestException("A new book cannot already have an ID", ENTITY_NAME, "idexists");
+            throw new BadRequestException("A new book cannot already have an ID");
         }
         Book result = bookService.save(book);
         return ResponseEntity.created(new URI("/api/books/" + result.getId()))
@@ -46,7 +44,7 @@ public class BookApi {
     @PutMapping("/books")
     public ResponseEntity<Book> updateBook(@Valid @RequestBody Book book) {
         if (book.getId() == null) {
-            throw new BadRequestException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestException("Invalid id");
         }
         Book result = bookService.save(book);
         return ResponseEntity.ok()

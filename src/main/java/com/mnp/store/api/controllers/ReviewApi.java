@@ -1,6 +1,8 @@
 package com.mnp.store.api.controllers;
 
+import com.mnp.store.contracts.BookService;
 import com.mnp.store.contracts.ReviewService;
+import com.mnp.store.contracts.dtos.CreateReviewDto;
 import com.mnp.store.contracts.users.UserService;
 import com.mnp.store.domain.Book;
 import com.mnp.store.domain.Review;
@@ -12,9 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -24,32 +23,29 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class ReviewApi {
 
-    private static final String ENTITY_NAME = "review";
     private final ReviewService reviewService;
     private final UserService userService;
+    private final BookService bookService;
 
-    public ReviewApi(ReviewService reviewService, UserService userService) {
+    public ReviewApi(ReviewService reviewService, UserService userService, BookService bookService) {
         this.reviewService = reviewService;
         this.userService = userService;
+        this.bookService = bookService;
     }
 
     @PostMapping("/reviews")
-    public ResponseEntity<Review> createReview(
-            @Valid @RequestBody @Min(1) @Max(5) int rating,
-            @Valid @RequestBody @Size(max = 254) String comment,
-            @Valid @RequestBody long bookId) throws URISyntaxException {
+    public ResponseEntity<Review> createReview(@Valid @RequestBody CreateReviewDto request) throws URISyntaxException {
         User user = userService.getCurrentUser()
-                .orElseThrow(() -> new BadRequestException("Invalid user session", ENTITY_NAME, "idnul"));
+                .orElseThrow(() -> new BadRequestException("Invalid user session"));
 
-        Book book = new Book();
-        book.setId(bookId);
+        Book book = bookService.findOne(request.getBookId()).orElseThrow(() -> new BadRequestException("Book doesn't exist"));
 
         Review newReview = new Review();
-        newReview.setRating(rating);
-        newReview.setComment(comment);
+        newReview.setRating(request.getRating());
+        newReview.setComment(request.getComment());
         newReview.setBook(book);
 
-        newReview.getUsers().add(user);
+        newReview.addUser(user);
 
         Review result = reviewService.save(newReview);
 
@@ -60,7 +56,7 @@ public class ReviewApi {
     @PutMapping("/reviews")
     public ResponseEntity<Review> updateReview(@Valid @RequestBody Review review) {
         if (review.getId() == null) {
-            throw new BadRequestException("Invalid id", ENTITY_NAME, "idnull");
+            throw new BadRequestException("Invalid id");
         }
         Review result = reviewService.save(review);
         return ResponseEntity.ok()

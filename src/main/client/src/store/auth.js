@@ -42,6 +42,17 @@ export default {
 
           const roleNames = data.roles.map(role => role.name)
           commit(SET_ROLES, roleNames)
+
+          // load cart
+          await Vue.prototype.$http.get(api.getCart)
+            .then(response => {
+              if (!response.data.itemBlob || response.data.itemBlob === "") {
+                return
+              }
+              const cart = JSON.parse(response.data.itemBlob)
+              localStore.setCart(cart)
+            })
+            .catch(err => console.log(err))
         }
         return data
       } catch (e) {

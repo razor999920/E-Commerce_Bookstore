@@ -79,7 +79,7 @@ export default {
     async handleLogout() {
       try {
         await this.$store.dispatch("authStore/logout")
-        await this.$store.dispatch("cartStore/clearCart")
+        await this.$store.dispatch("cartStore/clearCart", false)
         this.$notify({
           group: "all",
           type: "success",

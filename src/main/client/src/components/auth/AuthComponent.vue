@@ -41,6 +41,7 @@ export default {
     async login(info) {
       try {
         await this.$store.dispatch("authStore/login", info)
+        await this.$store.dispatch("cartStore/initializeCart")
         this.$emit("loginSuccess")
 
         localStore.setSessionTimeout(moment()

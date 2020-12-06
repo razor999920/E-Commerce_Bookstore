@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex flex-wrap">
-      <router-link v-for="item in items" :key="item.id" :to="{path: '/products', query:{ id: item.id }}">
+      <div v-for="item in items" :key="item.id">
         <div class="max-w-sm p-4">
           <div class="card flex flex-col justify-center p-10 bg-white rounded-lg shadow-lg">
             <div class="prod-img">
@@ -24,7 +24,7 @@
             </div>
           </div>
         </div>
-      </router-link>
+      </div>
     </div>
     <div class="flex items-center justify-center p-5">
       <t-button @click="loadMore()">{{ isLast ? "No more" : "Load more" }}</t-button>

@@ -1,4 +1,5 @@
 import Vue from "vue"
+import { debounce } from "lodash"
 
 import localStore from "@/utils/localStore"
 import api from "@/utils/api"
@@ -6,54 +7,54 @@ import api from "@/utils/api"
 export const SET_DATA = "SET_DATA"
 export const ADD_ITEM = "ADD_ITEM"
 export const REMOVE_ITEM = "REMOVE_ITEM"
-export const ADD_QUANTITY = "ADD_QUANTITY"
-export const REMOVE_QUANTITY = "REMOVE_QUANTITY"
 
 export default {
   namespaced: true,
   state: {
     items: [],
-    numberOfItems: 0,
-    total: 0,
   },
 
   actions: {
     async initializeCart({ commit }) {
       commit(SET_DATA, localStore.getCart())
-      commit(ADD_QUANTITY, localStore.getCartNumberOfItems())
-    },
-    loadCart({ commit }) {
-      // todo load from db if logged in
-      const data = []
-      commit(SET_DATA, data)
     },
 
-    addToCart({ commit }, item) {
+    updateRemote({ state, rootState }) {
+      if (rootState.authStore.isSessionActive) {
+        const items = JSON.stringify(state.items)
+        Vue.prototype.$http.put(api.updateCart, { blob: items })
+          .catch(err => console.log(err))
+      }
+    },
+
+    updateRemoteDebounce: debounce(({ dispatch }) => {
+      dispatch("updateRemote")
+    }, 1000 * 10),
+
+    addToCart({ commit, dispatch }, item) {
       const data = []
       data.push(item)
       commit(ADD_ITEM, data)
+      dispatch("updateRemoteDebounce")
     },
 
-    removeFromCart({ commit }, item) {
+    removeFromCart({ commit, dispatch }, item) {
       commit(REMOVE_ITEM, item)
+      dispatch("updateRemote")
     },
 
-    addQuantity({ commit }, quantity) {
-      commit(ADD_QUANTITY, quantity)
-    },
-    removeQuantity({ commit }, quantity) {
-      commit(REMOVE_QUANTITY, quantity)
-    },
-    async clearCart({ commit, state }) {
+    async clearCart({ commit, dispatch }, clearRemote) {
       commit(SET_DATA, [])
-      commit(REMOVE_QUANTITY, state.numberOfItems)
+
+      if (clearRemote) {
+        dispatch("updateRemote")
+      }
     },
-    async submitCart({ commit, state }, order) {
+    async submitCart({ dispatch }, order) {
       try {
         const { data } = await Vue.prototype.$http.post(api.createOrders, order)
         if (data && data.status === 201) {
-          commit(SET_DATA, [])
-          commit(REMOVE_QUANTITY, state.numberOfItems)
+          dispatch("updateRemote")
         }
       } catch (e) {
         console.log(e.response.data)
@@ -77,10 +78,7 @@ export default {
       if (!itemExists) {
         state.items.push(...item)
       }
-      state.numberOfItems += 1
-
       localStore.setCart(state.items)
-      localStore.setCartNumberOfItems(state.numberOfItems)
     },
     [REMOVE_ITEM](state, id) {
       for (let i = 0; i < state.items.length; i += 1) {
@@ -91,17 +89,7 @@ export default {
           }
         }
       }
-      state.numberOfItems -= 1
       localStore.setCart(state.items)
-      localStore.setCartNumberOfItems(state.numberOfItems)
-    },
-    [ADD_QUANTITY](state, quantity) {
-      state.numberOfItems += quantity
-      localStore.setCartNumberOfItems(state.numberOfItems)
-    },
-    [REMOVE_QUANTITY](state, quantity) {
-      state.numberOfItems -= quantity
-      localStore.setCartNumberOfItems(state.numberOfItems)
     },
   },
 
@@ -111,20 +99,11 @@ export default {
     },
 
     getNumberOfItems(state) {
-      return state.numberOfItems
+      return _.sumBy(state.items, "quantity")
     },
 
     getTotal(state) {
-      state.total = 0
-      // New Price
-      for (let i = 0; i < state.items.length; i += 1) {
-        if (state.items[i].quantity > 1) {
-          state.total += (parseFloat(state.items[i].price) * parseFloat(state.items[i].quantity))
-        } else {
-          state.total += parseFloat(state.items[i].price)
-        }
-      }
-      return state.total
+      return _.sumBy(state.items, "price")
     },
   },
 }

@@ -48,13 +48,7 @@ export default {
   setCart(item) {
     localStorage.setItem("cart", JSON.stringify(item))
   },
-  setCartNumberOfItems(numberOfItems) {
-    localStorage.setItem("cartNumberOfItems", numberOfItems)
-  },
   getCart() {
     return JSON.parse(localStorage.getItem("cart")) || []
-  },
-  getCartNumberOfItems() {
-    return parseInt(localStorage.getItem("cartNumberOfItems")) || 0
   },
 }

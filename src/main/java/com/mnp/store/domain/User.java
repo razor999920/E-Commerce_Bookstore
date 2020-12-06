@@ -1,5 +1,7 @@
 package com.mnp.store.domain;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import liquibase.pro.packaged.A;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -54,6 +56,10 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "user")
     private Set<Address> addresses = new HashSet<>();
+
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)
+    private Cart cart;
 
     public Long getId() {
         return id;
@@ -199,6 +205,19 @@ public class User implements Serializable {
             return false;
         }
         return id != null && id.equals(((User) o).id);
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public User cart(Cart cart) {
+        this.cart = cart;
+        return this;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
     @Override
