@@ -104,6 +104,11 @@ public class BookServiceImpl implements BookService {
                 .stream().map(BookCategory::new)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Book> getByIds(List<Long> bookIds) {
+        return bookRepository.findAllById(bookIds);
+    }
 }
 
 

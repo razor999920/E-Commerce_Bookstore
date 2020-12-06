@@ -69,7 +69,7 @@ const router = new VueRouter({
       },
       children: [
         {
-          path: "",
+          path: "/dashboard",
           component: AdminDashboard,
           name: "Dashboard",
         },
@@ -97,6 +97,10 @@ const router = new VueRouter({
           path: "orders",
           component: OrderList,
           name: "Orders",
+        },
+        {
+          path: "*",
+          component: AdminDashboard,
         },
       ],
     },

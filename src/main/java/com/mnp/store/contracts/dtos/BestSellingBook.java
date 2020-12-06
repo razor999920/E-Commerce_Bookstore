@@ -13,7 +13,7 @@ public interface BestSellingBook {
 
     String getImageUrl();
 
-    BigDecimal getPrice();
+    BigDecimal getSale();
 
     int getQuantity();
 }

@@ -2,6 +2,7 @@ package com.mnp.store.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -45,12 +46,8 @@ public class Address implements Serializable {
     @Column(name = "phone", length = 20, nullable = false)
     private String phone;
 
-    @ManyToMany(mappedBy = "addresses")
-    @JsonIgnore
-    private Set<Purchase> purchases = new HashSet<>();
-
     @ManyToOne
-    @JsonIgnoreProperties(value = "addresses", allowSetters = true)
+    @JsonIgnore
     private User user;
 
     public Long getId() {
@@ -124,31 +121,6 @@ public class Address implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public Set<Purchase> getPurchases() {
-        return purchases;
-    }
-
-    public Address purchases(Set<Purchase> purchases) {
-        this.purchases = purchases;
-        return this;
-    }
-
-    public Address addPurchase(Purchase purchase) {
-        this.purchases.add(purchase);
-        purchase.getAddresses().add(this);
-        return this;
-    }
-
-    public Address removePurchase(Purchase purchase) {
-        this.purchases.remove(purchase);
-        purchase.getAddresses().remove(this);
-        return this;
-    }
-
-    public void setPurchases(Set<Purchase> purchases) {
-        this.purchases = purchases;
     }
 
     @Override

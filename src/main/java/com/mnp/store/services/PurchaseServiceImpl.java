@@ -34,13 +34,13 @@ public class PurchaseServiceImpl implements PurchaseService {
 
 
     public Page<Purchase> findAllWithEagerRelationships(Pageable pageable) {
-        return purchaseRepository.findAllWithEagerRelationships(pageable);
+        return purchaseRepository.findAll(pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<Purchase> findOne(Long id) {
-        return purchaseRepository.findOneWithEagerRelationships(id);
+        return purchaseRepository.findById(id);
     }
 
     @Override

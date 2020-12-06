@@ -1,6 +1,7 @@
 package com.mnp.store.services;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -138,7 +139,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public BuyingStatistics getBuyingStatistics() {
+    public List<BuyingStatistics> getBuyingStatistics() {
         return userRepository.getBuyingStatistics();
     }
 }

@@ -40,7 +40,7 @@ public class Purchase implements Serializable {
     @Column(name = "status", nullable = false)
     private PurchaseStatus status;
 
-    @Column(name = "purchased_date")
+    @Column(name = "purchased_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", insertable = false, updatable = false)
     private Instant purchasedDate;
 
     @NotNull
@@ -48,14 +48,15 @@ public class Purchase implements Serializable {
     @Column(name = "total", precision = 21, scale = 2, nullable = false)
     private BigDecimal total;
 
-    @OneToMany(mappedBy = "purchase")
+    @NotNull
+    @NotEmpty
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<PurchaseItem> purchaseItems = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(name = "purchase_address",
-            joinColumns = @JoinColumn(name = "purchase_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "address_id", referencedColumnName = "id"))
-    private Set<Address> addresses = new HashSet<>();
+    @NotNull
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private Address address;
 
     @ManyToOne
     @JsonIgnoreProperties(value = "purchases", allowSetters = true)
@@ -119,13 +120,11 @@ public class Purchase implements Serializable {
 
     public Purchase addPurchaseItem(PurchaseItem purchaseItem) {
         this.purchaseItems.add(purchaseItem);
-        purchaseItem.setPurchase(this);
         return this;
     }
 
     public Purchase removePurchaseItem(PurchaseItem purchaseItem) {
         this.purchaseItems.remove(purchaseItem);
-        purchaseItem.setPurchase(null);
         return this;
     }
 
@@ -133,29 +132,12 @@ public class Purchase implements Serializable {
         this.purchaseItems = purchaseItems;
     }
 
-    public Set<Address> getAddresses() {
-        return addresses;
+    public Address getAddress() {
+        return address;
     }
 
-    public Purchase addresses(Set<Address> addresses) {
-        this.addresses = addresses;
-        return this;
-    }
-
-    public Purchase addAddress(Address address) {
-        this.addresses.add(address);
-        address.getPurchases().add(this);
-        return this;
-    }
-
-    public Purchase removeAddress(Address address) {
-        this.addresses.remove(address);
-        address.getPurchases().remove(this);
-        return this;
-    }
-
-    public void setAddresses(Set<Address> addresses) {
-        this.addresses = addresses;
+    public void setAddresses(Address address) {
+        this.address = address;
     }
 
     public User getUser() {
@@ -198,12 +180,16 @@ public class Purchase implements Serializable {
                 "}";
     }
 
-    public Instant getPurchasedDate() {
-        return purchasedDate;
+    public BigDecimal getTotal() {
+        return total;
     }
 
-    public void setPurchasedDate(Instant purchasedDate) {
-        this.purchasedDate = purchasedDate;
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+    public Instant getPurchasedDate() {
+        return purchasedDate;
     }
 }
 

@@ -1,6 +1,7 @@
 package com.mnp.store.api.controllers;
 
 import com.mnp.store.common.http.ResponseUtils;
+import com.mnp.store.contracts.dtos.BuyingStatResultDto;
 import com.mnp.store.contracts.dtos.BuyingStatistics;
 import com.mnp.store.contracts.users.UserService;
 import com.mnp.store.contracts.users.dtos.CreateUserRequestDto;
@@ -21,6 +22,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -71,9 +73,9 @@ public class UserApi {
     }
 
     @GetMapping("/users/statistics")
-    public ResponseEntity<BuyingStatistics> getBuyingStatistics() {
-        BuyingStatistics statistics = userService.getBuyingStatistics();
-        return ResponseEntity.ok(statistics);
+    public ResponseEntity<List<BuyingStatResultDto>> getBuyingStatistics() {
+        List<BuyingStatistics> statistics = userService.getBuyingStatistics();
+        return ResponseEntity.ok(statistics.stream().map(s -> new BuyingStatResultDto(UUID.randomUUID().toString(), s.getSpending())).collect(Collectors.toList()));
     }
 
     @GetMapping("/users/orders")

@@ -1,4 +1,7 @@
+import Vue from "vue"
+
 import localStore from "@/utils/localStore"
+import api from "@/utils/api"
 
 export const SET_DATA = "SET_DATA"
 export const ADD_ITEM = "ADD_ITEM"
@@ -20,6 +23,7 @@ export default {
       commit(ADD_QUANTITY, localStore.getCartNumberOfItems())
     },
     loadCart({ commit }) {
+      // todo load from db if logged in
       const data = []
       commit(SET_DATA, data)
     },
@@ -43,6 +47,18 @@ export default {
     async clearCart({ commit, state }) {
       commit(SET_DATA, [])
       commit(REMOVE_QUANTITY, state.numberOfItems)
+    },
+    async submitCart({ commit, state }, order) {
+      try {
+        const { data } = await Vue.prototype.$http.post(api.createOrders, order)
+        if (data && data.status === 201) {
+          commit(SET_DATA, [])
+          commit(REMOVE_QUANTITY, state.numberOfItems)
+        }
+      } catch (e) {
+        console.log(e.response.data)
+        throw new Error(e.response.data.message)
+      }
     },
   },
   mutations: {

@@ -4,39 +4,37 @@ import api from "@/utils/api"
 
 export const SET_LOADING = "SET_LOADING"
 export const SET_CATEGORIES = "SET_CATEGORIES"
-export const SET_FILTERS = "SET_FILTERS"
 export const SET_ITEMS = "SET_ITEMS"
 export const SET_PAGE = "SET_PAGE"
 export const SET_LAST = "SET_LAST"
 export const PUSH_TO_ITEMS = "PUSH_TO_ITEMS"
+export const SET_CURRENT_URL = "SET_BOOK_URL"
 
 export default {
   namespaced: true,
   state: {
     categories: [],
     items: [],
-    filters: [],
-    currentFilters: [],
-    currentCategory: "",
-    searchTerm: "",
     loading: false,
     reviews: [],
     page: 0,
     last: false,
+    currentUrl: api.getBooks,
   },
   actions: {
     async resetCategory({ commit }) {
       commit(SET_PAGE, 0)
       commit(SET_LAST, false)
     },
-    async loadBooks({ commit, state }, category) {
+    async loadBooks({ commit, state }) {
       try {
         const params = {
-          size: 10,
+          size: 12,
           page: state.page + 1,
         }
-        const url = category ? `${api.getBooksByCategory}/${category}` : api.getBooks
-        const response = await Vue.prototype.$http.get(url, { params })
+        const response = await Vue.prototype.$http.get(state.currentUrl, { params })
+          .catch(err => console.log(err))
+
         if (response && response.status === 200) {
           if (response.data.first) {
             commit(SET_ITEMS, response.data.content)
@@ -56,9 +54,20 @@ export default {
       commit(SET_CATEGORIES, response.data)
     },
 
-    loadFilters({ commit }) {
-      const filters = ["Filter 1", "Filter 2", "Filter 3"]
-      commit(SET_FILTERS, filters)
+    searchBooks({ commit, dispatch }, searchTerm) {
+      commit(SET_CURRENT_URL, `${api.searchBook}/${searchTerm}`)
+      dispatch("resetCategory")
+      dispatch("loadBooks")
+    },
+
+    loadBookByCategories({ commit, dispatch }, category) {
+      if (category && category !== "") {
+        commit(SET_CURRENT_URL, `${api.getBooksByCategory}/${category}`)
+      } else {
+        commit(SET_CURRENT_URL, `${api.getBooks}`)
+      }
+      dispatch("resetCategory")
+      dispatch("loadBooks")
     },
   },
   mutations: {
@@ -71,8 +80,8 @@ export default {
     [PUSH_TO_ITEMS](state, items) {
       state.items.push(...items)
     },
-    [SET_FILTERS](state, filters) {
-      state.filters = filters
+    [SET_CURRENT_URL](state, url) {
+      state.currentUrl = url
     },
     [SET_PAGE](state, page) {
       state.page = page
@@ -94,5 +103,13 @@ export default {
     getLast(state) {
       return state.last
     },
+    getReviews(state) {
+      let avgReview = 0
+      for (let i = 0; i < state.reviews.length; i += 1) {
+        avgReview += state.reviews[i]
+      }
+      avgReview /= state.reviews.length
+      return avgReview
+    }
   },
 }
