@@ -10,10 +10,11 @@ import BookList from "@/components/admin/catalog/BookList.vue"
 import AddBook from "@/components/admin/catalog/AddBook.vue"
 import BookDetail from "@/components/admin/catalog/BookDetail.vue"
 import UserList from "@/components/admin/user/UserList.vue"
-import OrderList from "@/components/admin/order/OrderList.vue"
 import AdminDashboard from "@/components/admin/dashboard/AdminDashboard.vue"
 import Cart from "@/views/Cart.vue"
 import Payment from "@/views/Payment.vue"
+import UserOrderList from "@/components/user/UserOrderList.vue"
+import ManageOrders from "@/components/admin/order/ManageOrders.vue"
 
 Vue.use(VueRouter)
 
@@ -41,7 +42,7 @@ const router = new VueRouter({
         },
         {
           path: "orders",
-          component: OrderList,
+          component: UserOrderList,
           meta: {
             requiresAuth: true,
           },
@@ -95,7 +96,7 @@ const router = new VueRouter({
         },
         {
           path: "orders",
-          component: OrderList,
+          component: ManageOrders,
           name: "Orders",
         },
         {

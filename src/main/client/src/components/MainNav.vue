@@ -2,11 +2,11 @@
   <nav class="fixed z-40 w-full bg-white">
     <div class="">
       <div class="grid grid-cols-12 border-b-2 border-gray-100 py-4 px-8">
-        <router-link to="/" class="col-span-2 flex items-center">
-          <div class="flex-shrink-0">
+        <div class="col-span-2 flex items-center">
+          <router-link to="/" class="flex-shrink-0 focus:outline-none">
             <img class="h-8 w-8" src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg" alt="Workflow">
-          </div>
-        </router-link>
+          </router-link>
+        </div>
         <div class="col-span-10 flex items-center justify-between">
           <div class="flex-1">
             <t-input @keyup.enter="handleSearch()" v-model="searchTerm"

@@ -33,6 +33,9 @@ const tailwindSettings = {
       closeIcon: "",
     },
     variants: {
+      big: {
+        wrapper: "z-50 relative mx-auto my-0 max-w-4xl mt-12",
+      },
       danger: {
         overlay: "bg-red-500",
         header: "border-red-100 text-red-700 border-b",

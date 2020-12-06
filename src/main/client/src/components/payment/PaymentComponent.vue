@@ -319,7 +319,6 @@ export default {
   methods: {
     handleSelectAddressClick(addressId) {
       const address = _.find(this.addresses, ["id", addressId])
-      console.log(address)
       this.order.firstname = address.firstname
       this.order.lastname = address.lastname
       this.order.street = address.street
