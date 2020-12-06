@@ -9,11 +9,13 @@ import com.mnp.store.contracts.users.dtos.UserResponseDto;
 import com.mnp.store.domain.Address;
 import com.mnp.store.domain.Purchase;
 import com.mnp.store.domain.User;
+import com.mnp.store.domain.constants.RoleConstants;
 import com.mnp.store.domain.exceptions.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -49,6 +51,7 @@ public class UserApi {
     }
 
     @GetMapping("/users")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.ADMIN + "\")")
     public ResponseEntity<Page<User>> getAllUsers(Pageable pageable,
                                                   @RequestParam(required = false, defaultValue = "false") boolean withRolesAndReview) {
         Page<User> page;
@@ -66,17 +69,20 @@ public class UserApi {
     }
 
     @DeleteMapping("/users/{username}")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.ADMIN + "\")")
     public void delete(@PathVariable String username) {
         userService.deleteUser(username);
     }
 
     @GetMapping("/users/statistics")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.ADMIN + "\")")
     public ResponseEntity<List<BuyingStatResultDto>> getBuyingStatistics() {
         List<BuyingStatistics> statistics = userService.getBuyingStatistics();
         return ResponseEntity.ok(statistics.stream().map(s -> new BuyingStatResultDto(UUID.randomUUID().toString(), s.getSpending())).collect(Collectors.toList()));
     }
 
     @GetMapping("/users/orders")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<List<Purchase>> getUserOrders() {
         User user = userService.getCurrentUser()
                 .orElseThrow(() -> new BadRequestException("Could not find user"));
@@ -85,6 +91,7 @@ public class UserApi {
     }
 
     @GetMapping("/users/addresses")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<Set<Address>> getAddresses() {
         User user = userService.getCurrentUser()
                 .orElseThrow(() -> new BadRequestException("Invalid user session"));

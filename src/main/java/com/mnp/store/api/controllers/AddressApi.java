@@ -2,9 +2,11 @@ package com.mnp.store.api.controllers;
 
 import com.mnp.store.contracts.AddressService;
 import com.mnp.store.domain.Address;
+import com.mnp.store.domain.constants.RoleConstants;
 import com.mnp.store.domain.exceptions.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,6 +27,7 @@ public class AddressApi {
     }
 
     @PostMapping("/addresses")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<Address> createAddress(@Valid @RequestBody Address address) throws URISyntaxException {
         if (address.getId() != null) {
             throw new BadRequestException("A new address cannot already have an ID");
@@ -34,6 +37,7 @@ public class AddressApi {
     }
 
     @PutMapping("/addresses")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<Address> updateAddress(@Valid @RequestBody Address address) throws URISyntaxException {
         if (address.getId() == null) {
             throw new BadRequestException("Invalid id");
@@ -43,11 +47,13 @@ public class AddressApi {
     }
 
     @GetMapping("/addresses")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.ADMIN + "\")")
     public List<Address> getAllAddresses() {
         return addressService.findAll();
     }
 
     @GetMapping("/addresses/{id}")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<Address> getAddress(@PathVariable Long id) {
         Optional<Address> address = addressService.findOne(id);
         return address.map(response -> ResponseEntity.ok().body(response))
@@ -55,6 +61,7 @@ public class AddressApi {
     }
 
     @DeleteMapping("/addresses/{id}")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<Void> deleteAddress(@PathVariable Long id) {
         addressService.delete(id);
         return ResponseEntity.noContent().build();

@@ -5,10 +5,12 @@ import com.mnp.store.contracts.dtos.CreateCartDto;
 import com.mnp.store.contracts.users.UserService;
 import com.mnp.store.domain.Cart;
 import com.mnp.store.domain.User;
+import com.mnp.store.domain.constants.RoleConstants;
 import com.mnp.store.domain.exceptions.BadRequestException;
 import liquibase.pro.packaged.C;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -31,6 +33,7 @@ public class CartApi {
     }
 
     @PutMapping("/carts")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<Cart> updateCart(@Valid @RequestBody CreateCartDto cart) {
         User user = userService.getCurrentUser().orElseThrow(() -> new BadRequestException("Invalid User Session"));
 
@@ -44,11 +47,13 @@ public class CartApi {
     }
 
     @GetMapping("/carts")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.ADMIN + "\")")
     public List<Cart> getAllCarts() {
         return cartService.findAll();
     }
 
     @GetMapping("/carts/current")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<Cart> getCart() {
         User user = userService.getCurrentUser().orElseThrow(() -> new BadRequestException("Invalid user session"));
         Cart cart = user.getCart();
@@ -56,6 +61,7 @@ public class CartApi {
     }
 
     @DeleteMapping("/carts")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<Void> deleteCart() {
         User user = userService.getCurrentUser().orElseThrow(() -> new BadRequestException("Invalid user session"));
         user.getCart().setUser(null);

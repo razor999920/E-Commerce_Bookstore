@@ -3,6 +3,10 @@ package com.mnp.store.domain.constants;
 import com.mnp.store.domain.Role;
 
 public final class RoleConstants {
+    public static final String ADMIN = "ROLE_ADMIN";
+    public static final String USER = "ROLE_USER";
+    public static final String ANONYMOUS = "ROLE_ANONYMOUS";
+
     public static Role admin() {
         Role role = new Role();
         role.setId(1L);

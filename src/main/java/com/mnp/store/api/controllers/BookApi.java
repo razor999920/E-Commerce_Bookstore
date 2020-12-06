@@ -6,11 +6,13 @@ import com.mnp.store.contracts.dtos.BestSellingBook;
 import com.mnp.store.contracts.dtos.BookCategory;
 import com.mnp.store.contracts.dtos.SalesPerMonth;
 import com.mnp.store.domain.Book;
+import com.mnp.store.domain.constants.RoleConstants;
 import com.mnp.store.domain.exceptions.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -90,18 +92,21 @@ public class BookApi {
     }
 
     @DeleteMapping("/books/id/{id}")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         bookService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/books/bestsellers")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.ADMIN + "\")")
     public ResponseEntity<List<BestSellingBook>> getBestSellers() {
         List<BestSellingBook> books = bookService.getBestSellers();
         return ResponseEntity.ok().body(books);
     }
 
     @GetMapping("/books/sales-per-month")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.ADMIN + "\")")
     public ResponseEntity<SalesPerMonth> getSalesPerMonth() {
         SalesPerMonth salesPerMonth = bookService.getSalesPerMonth();
         return ResponseEntity.ok().body(salesPerMonth);
