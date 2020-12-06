@@ -10,14 +10,17 @@
             <div class="prod-title mt-4 h-20">
               <p class="text-base uppercase text-gray-900 font-bold">{{ item.title }}</p>
               <p class="uppercase text-sm text-gray-400">
-                by {{ item.author }}
+                by {{ item.author }} <br />
+                Review {{ review }}/5
               </p>
             </div>
             <div class="prod-info grid gap-10">
               <div class="flex flex-col md:flex-row justify-between items-center text-gray-900">
                 <p class="font-bold text-xl">${{ item.price }}</p>
-                <button @click="addToCart(item.id, item.title, item.author, item.price)"
-                        class="px-6 py-2 transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none">
+                <button
+                  @click="addToCart(item.id, item.title, item.author, item.price)"
+                  class="px-6 py-2 transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none"
+                >
                   Add to cart
                 </button>
               </div>
@@ -71,6 +74,7 @@ export default {
     ...mapGetters({
       items: "catalogStore/getItems",
       isLast: "catalogStore/getLast",
+      review: "catalogStore/getReviews",
     }),
   },
   watch: {

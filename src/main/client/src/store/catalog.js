@@ -103,5 +103,13 @@ export default {
     getLast(state) {
       return state.last
     },
+    getReviews(state) {
+      let avgReview = 0
+      for (let i = 0; i < state.reviews.length; i += 1) {
+        avgReview += state.reviews[i]
+      }
+      avgReview /= state.reviews.length
+      return avgReview
+    }
   },
 }
