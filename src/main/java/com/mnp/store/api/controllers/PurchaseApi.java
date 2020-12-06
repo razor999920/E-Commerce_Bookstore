@@ -1,5 +1,6 @@
 package com.mnp.store.api.controllers;
 
+import com.mnp.store.contracts.AddressService;
 import com.mnp.store.contracts.BookService;
 import com.mnp.store.contracts.PurchaseItemService;
 import com.mnp.store.contracts.PurchaseService;
@@ -30,12 +31,14 @@ public class PurchaseApi {
     private final UserService userService;
     private final PurchaseItemService purchaseItemService;
     private final BookService bookService;
+    private final AddressService addressService;
 
-    public PurchaseApi(PurchaseService purchaseService, UserService userService, PurchaseItemService purchaseItemService, BookService bookService) {
+    public PurchaseApi(PurchaseService purchaseService, UserService userService, PurchaseItemService purchaseItemService, BookService bookService, AddressService addressService) {
         this.purchaseService = purchaseService;
         this.userService = userService;
         this.purchaseItemService = purchaseItemService;
         this.bookService = bookService;
+        this.addressService = addressService;
     }
 
     @PostMapping("/purchases")
@@ -44,7 +47,11 @@ public class PurchaseApi {
 
         // force current user id on address.
         Address address = request.getAddress();
-        address.setUser(user);
+        if (address.getId() == null) {
+            user.getAddresses().add(address);
+            address.setUser(user);
+            addressService.save(address);
+        }
 
         // get price and calculate total
         List<CreatePurchaseItemDto> items = request.getItems();
@@ -72,6 +79,7 @@ public class PurchaseApi {
         purchase.setPurchaseItems(purchaseItems);
         purchase.setAddresses(address);
         purchase.setTotal(total);
+
 
         Purchase result = purchaseService.save(purchase);
 

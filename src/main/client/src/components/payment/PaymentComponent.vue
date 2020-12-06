@@ -33,7 +33,38 @@
         </button>
       </div>
     </t-modal>
-    <div class="" v-if="!showBilling">
+    <div class="flex flex-col items-center">
+      <div v-if="addresses.length > 0" class="flex items-center mb-3">
+        <t-button variant="link" class="" v-if="showAddresses" @click="showAddressForm = true; showAddresses = false">
+          Add a new address
+        </t-button>
+        <t-button variant="link" v-if="!showAddresses && !showBilling"
+                  @click="showAddressForm = false; showAddresses = true">Cancel
+        </t-button>
+      </div>
+
+      <div class="max-w-sm">
+        <t-table
+          v-if="showAddresses"
+          variant="demo"
+          :data="addresses"
+        >
+          <template v-slot:row="props">
+            <tr class="cursor-pointer hover:bg-black hover:text-gray-200 px-3 py-2"
+                @click="handleSelectAddressClick(props.row.id)" :class="props.trClass">
+              <td :class="props.tdClass">
+                {{ props.row.street }}, {{ props.row.province }}, {{ props.row.country }}, {{ props.row.zip }}
+              </td>
+              <td :class="props.tdClass">
+                {{ props.row.phone }}
+              </td>
+            </tr>
+          </template>
+        </t-table>
+      </div>
+
+    </div>
+    <div class="" v-if="showAddressForm">
       <div class="max-w-lg mx-auto">
         <form @submit.prevent>
           <div class="shadow overflow-hidden sm:rounded-md">
@@ -165,7 +196,8 @@
         </form>
       </div>
     </div>
-    <div v-else class="shadow overflow-hidden sm:rounded-md max-w-lg mx-auto">
+
+    <div v-if="showBilling" class="shadow overflow-hidden sm:rounded-md max-w-lg mx-auto">
       <div class="px-4 py-5 bg-white sm:p-6">
         <label class="block text-4xl font-extrabold text-gray-700">Confirm Billing and Shipping
           Information</label>
@@ -181,8 +213,14 @@
         <label class="text-sm font-medium text-gray-700">Zip Code:</label> {{ order.zip }} <br />
       </div>
       <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+        <router-link
+          to="/cart"
+          type="button"
+          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          Cancel
+        </router-link>
         <button @click="handleCheckout()"
-                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
           Confirm Order
         </button>
       </div>
@@ -211,10 +249,35 @@ export default {
         province: "",
         zip: "",
         phone: "",
+        addressId: null,
       },
+      showAddresses: true,
+      showAddressForm: false,
       showBilling: false,
       success: false,
       showModal: false,
+      addressHeader: [
+        {
+          value: "street",
+          text: "street",
+        },
+        {
+          value: "province",
+          text: "province",
+        },
+        {
+          value: "country",
+          text: "country",
+        },
+        {
+          value: "zip",
+          text: "Postal Code",
+        },
+        {
+          value: "phone",
+          text: "phone",
+        },
+      ],
     }
   },
 
@@ -249,11 +312,32 @@ export default {
     },
   },
 
+  created() {
+    this.$store.dispatch("cartStore/loadAddresses")
+  },
+
   methods: {
+    handleSelectAddressClick(addressId) {
+      const address = _.find(this.addresses, ["id", addressId])
+      console.log(address)
+      this.order.firstname = address.firstname
+      this.order.lastname = address.lastname
+      this.order.street = address.street
+      this.order.province = address.province
+      this.order.country = address.country
+      this.order.city = address.city
+      this.order.zip = address.zip
+      this.order.phone = address.phone
+      this.order.addressId = addressId
+
+      this.showAddresses = false
+      this.showBilling = true
+    },
     validateForm() {
       this.$v.$touch()
       if (!this.$v.$invalid) {
         this.showBilling = true
+        this.showAddressForm = false
       }
     },
     async handleCheckout() {
@@ -262,12 +346,18 @@ export default {
         quantity: item.quantity,
       }))
 
+      if (purchaseItems.length <= 0) {
+        this.showModal = true
+      }
+
       const billing = {
         country: this.order.country,
         phone: this.order.phone,
+        city: this.order.city,
         province: this.order.province,
         street: this.order.street,
         zip: this.order.zip,
+        id: this.order.addressId,
       }
 
       const purchase = {
@@ -277,16 +367,17 @@ export default {
         items: purchaseItems,
         address: billing,
       }
-      this.$store
+
+      await this.$store
         .dispatch("cartStore/submitCart", purchase)
         .then(() => {
           this.success = true
-          this.openModal = true
-          this.$store.dispatch("cartStore/clearCart")
+          this.showModal = true
+          this.$store.dispatch("cartStore/clearCart", true)
         })
         .catch(() => {
           this.success = false
-          this.openModal = true
+          this.showModal = true
         })
     },
   },
@@ -295,6 +386,7 @@ export default {
       isSessionActive: "authStore/isSessionActive",
       items: "cartStore/getItems",
       total: "cartStore/getTotal",
+      addresses: "cartStore/getAddresses",
     }),
   },
 }

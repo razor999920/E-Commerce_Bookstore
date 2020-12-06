@@ -1,18 +1,15 @@
 package com.mnp.store.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
-@Table(name = "address")
+@Table(name = "address",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"street", "city", "province", "country", "zip", "phone"})})
 public class Address implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,6 +22,11 @@ public class Address implements Serializable {
     @Size(max = 100)
     @Column(name = "street", length = 100, nullable = false)
     private String street;
+
+    @NotNull
+    @Size(max = 20)
+    @Column(name = "city", length = 20, nullable = false)
+    private String city;
 
     @NotNull
     @Size(max = 20)
@@ -158,6 +160,14 @@ public class Address implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }
 

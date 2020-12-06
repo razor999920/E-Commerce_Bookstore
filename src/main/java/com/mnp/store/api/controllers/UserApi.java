@@ -6,6 +6,7 @@ import com.mnp.store.contracts.dtos.BuyingStatistics;
 import com.mnp.store.contracts.users.UserService;
 import com.mnp.store.contracts.users.dtos.CreateUserRequestDto;
 import com.mnp.store.contracts.users.dtos.UserResponseDto;
+import com.mnp.store.domain.Address;
 import com.mnp.store.domain.Purchase;
 import com.mnp.store.domain.User;
 import com.mnp.store.domain.exceptions.BadRequestException;
@@ -19,10 +20,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 
 import javax.validation.Valid;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -84,6 +82,13 @@ public class UserApi {
                 .orElseThrow(() -> new BadRequestException("Could not find user"));
 
         return ResponseEntity.ok(new ArrayList<>(user.getPurchases()));
+    }
+
+    @GetMapping("/users/addresses")
+    public ResponseEntity<Set<Address>> getAddresses() {
+        User user = userService.getCurrentUser()
+                .orElseThrow(() -> new BadRequestException("Invalid user session"));
+        return ResponseEntity.ok().body(user.getAddresses());
     }
 }
 

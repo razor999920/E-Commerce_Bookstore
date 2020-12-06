@@ -7,11 +7,13 @@ import api from "@/utils/api"
 export const SET_DATA = "SET_DATA"
 export const ADD_ITEM = "ADD_ITEM"
 export const REMOVE_ITEM = "REMOVE_ITEM"
+export const SET_ADDRESSES = "SET_ADDRESSES"
 
 export default {
   namespaced: true,
   state: {
     items: [],
+    addresses: [],
   },
 
   actions: {
@@ -50,16 +52,25 @@ export default {
         dispatch("updateRemote")
       }
     },
-    async submitCart({ dispatch }, order) {
+    async submitCart({ commit }, order) {
       try {
-        const { data } = await Vue.prototype.$http.post(api.createOrders, order)
-        if (data && data.status === 201) {
-          dispatch("updateRemote")
-        }
+        await Vue.prototype.$http.post(api.createOrders, order)
+        commit(SET_ADDRESSES, [])
       } catch (e) {
         console.log(e.response.data)
         throw new Error(e.response.data.message)
       }
+    },
+    async loadAddresses({ commit, rootState }) {
+      if (!rootState.authStore.isSessionActive) {
+        return
+      }
+
+      await Vue.prototype.$http.get(api.getAddresses)
+        .then(res => {
+          commit(SET_ADDRESSES, res.data)
+        })
+        .catch(err => console.log(err))
     },
   },
   mutations: {
@@ -91,6 +102,9 @@ export default {
       }
       localStore.setCart(state.items)
     },
+    [SET_ADDRESSES](state, addresses) {
+      state.addresses = addresses
+    },
   },
 
   getters: {
@@ -104,6 +118,10 @@ export default {
 
     getTotal(state) {
       return _.sumBy(state.items, "price")
+    },
+
+    getAddresses(state) {
+      return state.addresses
     },
   },
 }

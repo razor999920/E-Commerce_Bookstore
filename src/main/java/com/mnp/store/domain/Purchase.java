@@ -54,7 +54,7 @@ public class Purchase implements Serializable {
     private Set<PurchaseItem> purchaseItems = new HashSet<>();
 
     @NotNull
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "address_id")
     private Address address;
 
