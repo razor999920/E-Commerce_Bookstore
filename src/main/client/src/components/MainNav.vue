@@ -27,7 +27,7 @@
                   </router-link>
 
                   <div class="flex ml-3" v-if="isSessionActive">
-                    <router-link v-if="isAdmin" to="/admin"
+                    <router-link v-if="isAdmin" to="/admin/dashboard"
                                  class="ml-3 w-full flex items-center justify-center px-4 py-2 border border-transparent shadow-sm text-base font-medium text-white bg-black hover:bg-gray-800 hover:text-gray-200">
                       Admin
                     </router-link>

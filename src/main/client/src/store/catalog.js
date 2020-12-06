@@ -49,6 +49,20 @@ export default {
       }
     },
 
+    async addReview(_, review) {
+      try {
+        console.log("here")
+        console.log(review)
+        const response = await Vue.prototype.$http.post(api.addReview, review)
+
+        if (response && response.status !== 200) {
+          throw response
+        }
+      } catch (e) {
+        throw new Error(e.response.data.detail)
+      }
+    },
+
     async loadCategories({ commit }) {
       const response = await Vue.prototype.$http.get(api.getCategories)
       commit(SET_CATEGORIES, response.data)
