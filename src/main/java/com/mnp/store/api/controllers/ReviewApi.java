@@ -7,9 +7,11 @@ import com.mnp.store.contracts.users.UserService;
 import com.mnp.store.domain.Book;
 import com.mnp.store.domain.Review;
 import com.mnp.store.domain.User;
+import com.mnp.store.domain.constants.RoleConstants;
 import com.mnp.store.domain.exceptions.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -34,6 +36,7 @@ public class ReviewApi {
     }
 
     @PostMapping("/reviews")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<Review> createReview(@Valid @RequestBody CreateReviewDto request) throws URISyntaxException {
         User user = userService.getCurrentUser()
                 .orElseThrow(() -> new BadRequestException("Invalid user session"));
@@ -54,6 +57,7 @@ public class ReviewApi {
     }
 
     @PutMapping("/reviews/book/{bookId}")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<Review> updateReview(@Valid @RequestBody Review review, @PathVariable Long bookId) {
         if (review.getId() == null) {
             throw new BadRequestException("Invalid id");
@@ -68,11 +72,13 @@ public class ReviewApi {
     }
 
     @GetMapping("/reviews")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public List<Review> getAllReviews() {
         return reviewService.findAll();
     }
 
     @GetMapping("/reviews/{id}")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<Review> getReview(@PathVariable Long id) {
         Optional<Review> review = reviewService.findOne(id);
         return review.map(response -> ResponseEntity.ok().body(response))
@@ -80,6 +86,7 @@ public class ReviewApi {
     }
 
     @DeleteMapping("/reviews/{id}")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
         reviewService.delete(id);
         return ResponseEntity.noContent().build();

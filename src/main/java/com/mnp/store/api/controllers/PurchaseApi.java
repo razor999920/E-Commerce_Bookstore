@@ -8,11 +8,13 @@ import com.mnp.store.contracts.dtos.CreatePurchaseDto;
 import com.mnp.store.contracts.dtos.CreatePurchaseItemDto;
 import com.mnp.store.contracts.users.UserService;
 import com.mnp.store.domain.*;
+import com.mnp.store.domain.constants.RoleConstants;
 import com.mnp.store.domain.exceptions.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
 
@@ -42,6 +44,7 @@ public class PurchaseApi {
     }
 
     @PostMapping("/purchases")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<Purchase> createPurchase(@Valid @RequestBody CreatePurchaseDto request) throws URISyntaxException {
         User user = userService.getCurrentUser().orElseThrow(() -> new BadRequestException("Invalid user session"));
 
@@ -88,6 +91,7 @@ public class PurchaseApi {
     }
 
     @PutMapping("/purchases")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<Purchase> updatePurchase(@Valid @RequestBody Purchase purchase) throws URISyntaxException {
         if (purchase.getId() == null) {
             throw new BadRequestException("Invalid id");
@@ -98,6 +102,7 @@ public class PurchaseApi {
     }
 
     @GetMapping("/purchases")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.ADMIN + "\")")
     public ResponseEntity<List<Purchase>> getAllPurchases(Pageable pageable, @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         Page<Purchase> page;
         if (eagerload) {
@@ -109,6 +114,7 @@ public class PurchaseApi {
     }
 
     @GetMapping("/purchases/{id}")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<Purchase> getPurchase(@PathVariable Long id) {
         Optional<Purchase> purchase = purchaseService.findOne(id);
         return purchase.map(response -> ResponseEntity.ok().body(response))
@@ -117,6 +123,7 @@ public class PurchaseApi {
     }
 
     @DeleteMapping("/purchases/{id}")
+    @PreAuthorize("hasAuthority(\"" + RoleConstants.USER + "\")")
     public ResponseEntity<Void> deletePurchase(@PathVariable Long id) {
         purchaseService.delete(id);
         return ResponseEntity.noContent().build();
