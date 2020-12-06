@@ -52,11 +52,10 @@ export default {
         this.currentCategory = category
         this.$store.dispatch("catalogStore/resetCategory")
       }
-      this.$store.dispatch("catalogStore/loadBooks", category)
+      this.$store.dispatch("catalogStore/loadBookByCategories", category)
     },
     loadMore() {
-      const { category } = this.$route.query
-      this.$store.dispatch("catalogStore/loadBooks", category)
+      this.$store.dispatch("catalogStore/loadBooks")
     },
     addToCart(idComponent, titleComponent, authorComponent, priceComponent) {
       this.$store.dispatch("cartStore/addToCart", {

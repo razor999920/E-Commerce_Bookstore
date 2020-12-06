@@ -32,13 +32,8 @@ public class PurchaseItem implements Serializable {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @OneToOne
-    @JoinColumn(unique = true)
-    private Book book;
-
     @ManyToOne
-    @JsonIgnoreProperties(value = "purchaseItems", allowSetters = true)
-    private Purchase purchase;
+    private Book book;
 
     public Long getId() {
         return id;
@@ -85,19 +80,6 @@ public class PurchaseItem implements Serializable {
 
     public void setBook(Book book) {
         this.book = book;
-    }
-
-    public Purchase getPurchase() {
-        return purchase;
-    }
-
-    public PurchaseItem purchase(Purchase purchase) {
-        this.purchase = purchase;
-        return this;
-    }
-
-    public void setPurchase(Purchase purchase) {
-        this.purchase = purchase;
     }
 
     @Override

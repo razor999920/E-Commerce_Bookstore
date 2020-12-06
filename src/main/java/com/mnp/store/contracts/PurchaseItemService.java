@@ -47,5 +47,7 @@ public interface PurchaseItemService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    List<PurchaseItem> findByIds(List<Long> ids);
 }
 

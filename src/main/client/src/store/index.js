@@ -5,7 +5,6 @@ import AuthStore from "@/store/auth"
 import CatalogStore from "@/store/catalog"
 import AdminStore from "@/store/admin"
 import CartStore from "@/store/cart"
-import BillingStore from "@/store/billing"
 
 Vue.use(Vuex)
 
@@ -15,6 +14,5 @@ export default new Vuex.Store({
     catalogStore: CatalogStore,
     adminStore: AdminStore,
     cartStore: CartStore,
-    billingStore: BillingStore,
   },
 })

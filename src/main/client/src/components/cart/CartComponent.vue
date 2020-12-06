@@ -50,7 +50,7 @@
         </router-link>
       </div>
       <div>
-        <router-link to="/cart/payment" tag="button"
+        <router-link v-if="items.length !== 0" to="/cart/payment" tag="button"
                      class="px-2 py-2 mt-6 font-medium tracking-widest text-white uppercase bg-black shadow-lg focus:outline-none hover:bg-gray-900 hover:shadow-none">
           Checkout
         </router-link>

@@ -21,6 +21,7 @@ const api = {
   getBestsellers: "/books/bestsellers",
   getSalesPerMonth: "/books/sales-per-month",
   getOrders: "/purchases",
+  createOrders: "/purchases",
   getReviews: "/reviews",
   getUsers: "/users",
   getBuyStats: "/users/statistics",

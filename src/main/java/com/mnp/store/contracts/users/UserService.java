@@ -1,5 +1,6 @@
 package com.mnp.store.contracts.users;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.mnp.store.contracts.dtos.BuyingStatistics;
@@ -36,6 +37,6 @@ public interface UserService {
 
     User save(User user);
 
-    BuyingStatistics getBuyingStatistics();
+    List<BuyingStatistics> getBuyingStatistics();
 }
 

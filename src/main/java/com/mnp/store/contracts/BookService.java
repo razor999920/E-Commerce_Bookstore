@@ -4,6 +4,7 @@ import com.mnp.store.contracts.dtos.BestSellingBook;
 import com.mnp.store.contracts.dtos.BookCategory;
 import com.mnp.store.contracts.dtos.SalesPerMonth;
 import com.mnp.store.domain.Book;
+import com.mnp.store.domain.PurchaseItem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -30,5 +31,7 @@ public interface BookService {
     SalesPerMonth getSalesPerMonth();
 
     List<BookCategory> getAllCategories();
+
+    List<Book> getByIds(List<Long> itemIds);
 }
 

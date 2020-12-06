@@ -37,6 +37,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select user from User user left join fetch user.roles left join fetch user.reviews where user.id =:id")
     Optional<User> findAllWithRolesAndReviews(@Param("id") Long id);
 
-    @Query("select user.username, sum(purchase.total) as spending from User user inner join Purchase purchase on user = purchase.user group by user.id")
-    BuyingStatistics getBuyingStatistics();
+    @Query(value = "select sum(p.total) as spending from user join purchase p on user.id = p.user_id group by user.id", nativeQuery = true)
+    List<BuyingStatistics> getBuyingStatistics();
 }

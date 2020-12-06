@@ -29,7 +29,16 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     Page<Book> findAllByAuthorContainingIgnoreCase(Pageable pageable, String search);
 
-    @Query(value = "select book.id, book.isbn, book.title, book.author, book.imageUrl, book.price, sum(item.quantity) as quantity from Book book inner join PurchaseItem item on book.id = item.book.id group by book.id, book.title order by quantity desc")
+    @Query(value = "select " +
+            "book.id, " +
+            "book.isbn, " +
+            "book.title, " +
+            "book.author, " +
+            "book.image_url as imageUrl, " +
+            "sum(item.quantity) as quantity, " +
+            "sum(item.price) as sale " +
+            "from book join purchase_item item on book.id = item.book_id group by book.id order by quantity desc",
+            nativeQuery = true)
     Page<BestSellingBook> getBestSellers(Pageable pageable);
 
 
