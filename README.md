@@ -40,19 +40,17 @@ Download the code from the GitHub, to run the code open the folder ‘client’ 
 
 1. First run the Spring Boot application on visual studio code
 
-Next run the following three commands on your terminal
+2. Run the following command on your terminal to download and install neccessary packages
 
 ```yarn ```
 
-2. This command is run to download and install packages
+3. The next command is ran to fix formatting on windows (Lf format for windows and crlf on linux)
 
 ```yarn lint```
 
-3. The command above is ran to fix formatting on windows (Lf format for windows and crlf on linux)
+4. The last command is ran to compile the client
 
 ```yarn serve```
-
-4. The command above is ran to compile the client
 
 This runs the server locally on localhost although it is identical to the running web server hosted on azure previously mentioned.
 
