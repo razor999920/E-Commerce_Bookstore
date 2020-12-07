@@ -4,7 +4,7 @@
       <div class="grid grid-cols-12 border-b-2 border-gray-100 py-4 px-8">
         <div class="col-span-2 flex items-center">
           <router-link to="/" class="flex-shrink-0 focus:outline-none">
-            <img class="h-8 w-8" src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg" alt="Workflow">
+            <img class="h-16 w-22" src="@/assets/logoMomPop.png" alt="Workflow">
           </router-link>
         </div>
         <div class="col-span-10 flex items-center justify-between">

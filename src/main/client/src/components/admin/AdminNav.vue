@@ -6,7 +6,7 @@
           <div class="flex items-center">
             <router-link to="/" class="col-span-2 flex items-center">
               <div class="flex-shrink-0">
-                <img class="h-8 w-8" src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg" alt="Workflow" />
+                <img class="h-12 w-22" src="@/assets/popWhite.png" alt="Workflow" />
               </div>
             </router-link>
             <div class="hidden md:block">
