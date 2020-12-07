@@ -169,7 +169,9 @@
                                         <includes>
                                             <include>css/</include>
                                             <include>js/</include>
+                                            <include>img/</include>
                                             <include>favicon.ico</include>
+                                            <include>favicon.png</include>
                                             <include>index.html</include>
                                         </includes>
                                     </resource>

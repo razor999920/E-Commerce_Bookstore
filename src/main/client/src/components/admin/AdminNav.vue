@@ -14,7 +14,6 @@
                 <router-link to="/admin/dashboard" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"> Dashboard </router-link>
                 <router-link to="/admin/books" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"> Books </router-link>
                 <router-link to="/admin/orders" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"> Orders </router-link>
-                <router-link to="/admin/users" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"> Users </router-link>
               </div>
             </div>
           </div>

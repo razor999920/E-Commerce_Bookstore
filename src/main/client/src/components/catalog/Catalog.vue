@@ -142,8 +142,8 @@ export default {
         })
       }
     },
-    async addReviewId({ rootState }, bookId) {
-      if (!rootState.authStore.isSessionActive) {
+    async addReviewId(bookId) {
+      if (!this.isLoggedIn) {
         return
       }
       const review = await this.$store.dispatch("catalogStore/loadUserReviewForBook", bookId)
@@ -165,6 +165,7 @@ export default {
       items: "catalogStore/getItems",
       isLast: "catalogStore/getLast",
       getReviews: "catalogStore/getReviews",
+      isLoggedIn: "authStore/isSessionActive"
     }),
   },
   watch: {
