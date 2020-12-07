@@ -1,5 +1,6 @@
 package com.mnp.store.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mnp.store.domain.constants.PurchaseStatus;
 
@@ -59,7 +60,7 @@ public class Purchase implements Serializable {
     private Address address;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = "purchases", allowSetters = true)
+    @JsonIgnore
     private User user;
 
     public Long getId() {

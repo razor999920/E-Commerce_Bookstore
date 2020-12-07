@@ -15,11 +15,9 @@ import java.util.List;
 public class CreatePurchaseDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @NotNull
     @Size(max = 20)
     private String firstname;
 
-    @NotNull
     @Size(max = 20)
     private String lastname;
 

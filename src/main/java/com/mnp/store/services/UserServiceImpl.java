@@ -63,10 +63,8 @@ public class UserServiceImpl implements UserService {
         User newUser = new User();
         mapper.map(userInfo, newUser);
 
-        // TODO: remove this
         Set<Role> roles = new HashSet<>();
         roles.add(RoleConstants.user());
-        roles.add(RoleConstants.admin());
         newUser.setRoles(roles);
 
         newUser.setPassword(passwordEncoder.encode(userInfo.getPassword()));

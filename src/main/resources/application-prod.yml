@@ -1,0 +1,27 @@
+logging:
+  level:
+    ROOT: INFO
+    com.mnp.store: INFO
+
+spring:
+  profiles:
+    active: prod
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+  liquibase:
+    enabled: false
+
+server:
+  port: 4000
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json

@@ -60,7 +60,8 @@ public class Book implements Serializable {
     @Column(name = "category", length = 64)
     private String category;
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value = {"book", "user"})
     private Set<Review> reviews = new HashSet<>();
 
     public Long getId() {

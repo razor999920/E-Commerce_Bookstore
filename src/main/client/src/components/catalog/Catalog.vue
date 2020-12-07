@@ -98,6 +98,13 @@ export default {
     this.loadItems()
   },
   methods: {
+    loadRatings(reviews) {
+      if (!reviews) {
+        return 0
+      }
+      const total = _.sumBy(reviews, "rating")
+      return Math.ceil(total / reviews.length)
+    },
     loadItems() {
       const { category } = this.$route.query
       if (this.currentCategory !== category) {
@@ -108,10 +115,6 @@ export default {
     },
     loadMore() {
       this.$store.dispatch("catalogStore/loadBooks")
-    },
-    loadRatings(reviews) {
-      const total = _.sumBy(reviews, "rating")
-      return Math.ceil(total / reviews.length)
     },
     addToCart(idComponent, titleComponent, authorComponent, priceComponent) {
       this.$store.dispatch("cartStore/addToCart", {
@@ -139,8 +142,8 @@ export default {
         })
       }
     },
-    async addReviewId(bookId) {
-      if (!this.$store.state.authStore.isSessionActive) {
+    async addReviewId({ rootState }, bookId) {
+      if (!rootState.authStore.isSessionActive) {
         return
       }
       const review = await this.$store.dispatch("catalogStore/loadUserReviewForBook", bookId)

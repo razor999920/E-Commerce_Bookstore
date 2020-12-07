@@ -75,8 +75,17 @@ public class PurchaseApi {
         }
 
         Purchase purchase = new Purchase();
-        purchase.setFirstname(request.getFirstname());
-        purchase.setLastname(request.getLastname());
+
+        if (request.getFirstname() == null || request.getFirstname().isEmpty())
+            purchase.setFirstname("ANONYMOUS");
+        else
+            purchase.setFirstname(request.getFirstname());
+
+        if (request.getLastname() == null || request.getLastname().isEmpty())
+            purchase.setLastname("ANONYMOUS");
+        else
+            purchase.setLastname(request.getLastname());
+
         purchase.setStatus(request.getStatus());
         purchase.setUser(user);
         purchase.setPurchaseItems(purchaseItems);

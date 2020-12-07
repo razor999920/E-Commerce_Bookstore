@@ -50,7 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     "/**/*.html",
                     "/**/*.css",
                     "/**/*.js").permitAll()
-            .antMatchers("/api/**").permitAll()
+            .antMatchers("/api/auth/**").permitAll()
+            .antMatchers("/api/books/**").permitAll()
             .anyRequest().authenticated()
         .and()
             .apply(new JwtAuthenticationConfigurer(tokenProvider))

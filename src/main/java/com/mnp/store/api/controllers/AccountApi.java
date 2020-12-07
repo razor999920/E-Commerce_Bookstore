@@ -27,6 +27,7 @@ public class AccountApi {
         this.userService = userService;
     }
 
+
     @PostMapping("/auth/login")
     public ResponseEntity<UserResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequest) {
         HttpHeaders responseHeaders = new HttpHeaders();

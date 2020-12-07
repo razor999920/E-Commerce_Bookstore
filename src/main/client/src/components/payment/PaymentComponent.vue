@@ -312,8 +312,12 @@ export default {
     },
   },
 
-  created() {
-    this.$store.dispatch("cartStore/loadAddresses")
+  async created() {
+    await this.$store.dispatch("cartStore/loadAddresses")
+    if (!this.addresses.length) {
+      this.showAddresses = false
+      this.showAddressForm = true
+    }
   },
 
   methods: {

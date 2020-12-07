@@ -8,12 +8,14 @@ export const SET_DATA = "SET_DATA"
 export const ADD_ITEM = "ADD_ITEM"
 export const REMOVE_ITEM = "REMOVE_ITEM"
 export const SET_ADDRESSES = "SET_ADDRESSES"
+export const SET_PAY_COUNT = "SET_PAY_COUNT"
 
 export default {
   namespaced: true,
   state: {
     items: [],
     addresses: [],
+    payCount: 0,
   },
 
   actions: {
@@ -52,7 +54,13 @@ export default {
         dispatch("updateRemote")
       }
     },
-    async submitCart({ commit }, order) {
+    async submitCart({ commit, state }, order) {
+      commit(SET_PAY_COUNT)
+
+      if (state.payCount === 3) {
+        throw new Error("Payment failed.")
+      }
+
       try {
         await Vue.prototype.$http.post(api.createOrders, order)
         commit(SET_ADDRESSES, [])
@@ -105,13 +113,15 @@ export default {
     [SET_ADDRESSES](state, addresses) {
       state.addresses = addresses
     },
+    [SET_PAY_COUNT](state) {
+      state.payCount = state.payCount > 3 ? 1 : state.payCount + 1
+    },
   },
 
   getters: {
     getItems(state) {
       return state.items
     },
-
     getNumberOfItems(state) {
       const quantity = _.sumBy(state.items, "quantity")
       const subtotal = _.sumBy(state.items, "price") * quantity
