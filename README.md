@@ -31,3 +31,31 @@
 
 ## Documentation
 - [ ] TODO
+
+## How to use:
+Our whole Mom & Pop ecommerce application is functionally running on the link provided in our “links” file in our submission folder. 
+Found here: https://mnp-ecom-2020.azurewebsites.net/#/
+
+Download the code from the GitHub, to run the code open the folder ‘client’ in terminal and execute the following commands:
+
+1. First run the Spring Boot application on visual studio code
+
+Next run the following three commands on your terminal
+
+```yarn ```
+
+2. This command is run to download and install packages
+
+```yarn lint```
+
+3. The command above is ran to fix formatting on windows (Lf format for windows and crlf on linux)
+
+```yarn serve```
+
+4. The command above is ran to compile the client
+
+This runs the server locally on localhost although it is identical to the running web server hosted on azure previously mentioned.
+
+Below are the admin account credentials:
+Username – mompop
+Password – mompop
