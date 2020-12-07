@@ -1,6 +1,33 @@
 
 mnp:
   jwt:
+<<<<<<< Updated upstream
     secret: supersecret
     accessTokenExpiration: 3600000 # ms == 1 hour
     refreshTokenExpiration: 604800000 # ms == 7 days
+=======
+    secret: JUWbceHsFPBKZnXx+vs8tNnmISB823RTXSaRe/ubpAlRUrpuDbyDckydOYMkeyN4uB1trCY2HOmGiQBQhcKL8Q==
+    accessTokenExpiration: 3600 # 1 hour
+    refreshTokenExpiration: 604800 # 7 days
+
+logging:
+  level:
+    ROOT: debug
+    com.mnp.store: debug
+
+server:
+  port: 4000
+
+spring:
+  profiles:
+    active: dev
+  devtools:
+    restart:
+      enabled: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  liquibase:
+    enabled: false
+>>>>>>> Stashed changes
