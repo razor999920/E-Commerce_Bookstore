@@ -29,9 +29,6 @@
 - [x] Best sellers
 - [x] Customers' spending 
 
-## Documentation
-- [ ] TODO
-
 ## How to use:
 Our whole Mom & Pop ecommerce application is functionally running on the link provided in our “links” file in our submission folder. 
 Found here: https://mnp-ecom-2020.azurewebsites.net/#/
